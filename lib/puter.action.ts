@@ -135,15 +135,11 @@ export const getProjectById = async ({ id }: { id: string }) => {
     return null;
   }
 
-  console.log("Fetching project with ID:", id);
-
   try {
     const response = await puter.workers.exec(
       `${PUTER_WORKER_URL}/api/projects/get?id=${encodeURIComponent(id)}`,
       { method: "GET" },
     );
-
-    console.log("Fetch project response:", response);
 
     if (!response.ok) {
       console.error("Failed to fetch project:", await response.text());
@@ -154,11 +150,33 @@ export const getProjectById = async ({ id }: { id: string }) => {
       project?: DesignItem | null;
     };
 
-    console.log("Fetched project data:", data);
-
     return data?.project ?? null;
   } catch (error) {
     console.error("Failed to fetch project:", error);
     return null;
+  }
+};
+
+export const deleteProject = async (id: string) => {
+  if (!PUTER_WORKER_URL) {
+    console.warn("Missing VITE_PUTER_WORKER_URL; skip delete;");
+    return false;
+  }
+
+  try {
+    const response = await puter.workers.exec(
+      `${PUTER_WORKER_URL}/api/projects/delete?id=${encodeURIComponent(id)}`,
+      { method: "DELETE" },
+    );
+
+    if (!response.ok) {
+      console.error("Failed to delete project:", await response.text());
+      return false;
+    }
+
+    return true;
+  } catch (e) {
+    console.error("Failed to delete project:", e);
+    return false;
   }
 };
