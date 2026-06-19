@@ -1,11 +1,25 @@
 import type { Route } from "./+types/home";
 import Navbar from "../../componens/Navbar";
-import { ArrowRight, ArrowUpRight, Clock, Layers, Trash2, AlertTriangle, X } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Clock,
+  Layers,
+  Trash2,
+  AlertTriangle,
+  X,
+} from "lucide-react";
 import Button from "../../componens/ui/Button";
 import Upload from "../../componens/Upload";
 import { useNavigate } from "react-router";
 import { useEffect, useRef, useState } from "react";
-import { createProject, getProjects, deleteProject, getPublicProjects } from "../../lib/puter.action";
+import {
+  createProject,
+  getProjects,
+  deleteProject,
+  getPublicProjects,
+  getCurrentUser,
+} from "../../lib/puter.action";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -78,24 +92,25 @@ export default function Home() {
 
   useEffect(() => {
     const fetchProjects = async () => {
-      const [myProjects, publicProjects] = await Promise.all([
+      const user = await getCurrentUser();
+      const currentUserId = user?.uuid || null;
+
+      const [myPrivateProjects, allPublicProjects] = await Promise.all([
         getProjects(),
         getPublicProjects(),
       ]);
 
-      const myProjectIds = new Set(myProjects.map((p: DesignItem) => p.id));
-      const communityProjects = publicProjects.filter(
-        (p: DesignItem) => !myProjectIds.has(p.id),
-      );
+      const myPublicProjects = currentUserId
+        ? allPublicProjects.filter(
+            (p: DesignItem) => p.ownerId === currentUserId,
+          )
+        : [];
 
-      const merged = [
-        ...myProjects.map((p: DesignItem) => ({ ...p, isOwn: true })),
-        ...communityProjects.map((p: DesignItem) => ({ ...p, isOwn: false })),
-      ];
+      const myProjects = [...myPrivateProjects, ...myPublicProjects];
 
-      merged.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+      myProjects.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
-      setProjects(merged);
+      setProjects(myProjects);
     };
 
     fetchProjects();
@@ -130,7 +145,12 @@ export default function Home() {
             Start Building <ArrowRight className="icon" />
           </a>
 
-          <Button variant="outline" size="lg" className="demo" onClick={() => setIsDemoOpen(true)}>
+          <Button
+            variant="outline"
+            size="lg"
+            className="demo"
+            onClick={() => setIsDemoOpen(true)}
+          >
             Watch Demo
           </Button>
         </div>
@@ -157,17 +177,23 @@ export default function Home() {
         <div className="section-inner">
           <div className="section-head">
             <div className="copy">
-              <h2>Projects</h2>
+              <h2>Your Projects</h2>
               <p>
-                Your latest work and shared community projects, all in one
-                place.
+                Everything you've built, private and shared, all in one place.
               </p>
             </div>
           </div>
 
           <div className="projects-grid">
             {projects.map(
-              ({ id, name, renderedImage, sourceImage, timestamp, isOwn, sharedBy }) => (
+              ({
+                id,
+                name,
+                renderedImage,
+                sourceImage,
+                timestamp,
+                isPublic,
+              }) => (
                 <div
                   key={id}
                   className="project-card group"
@@ -177,18 +203,16 @@ export default function Home() {
                     <img src={renderedImage || sourceImage} alt="Project" />
 
                     <div className="badge">
-                      <span>{isOwn ? "Mine" : "Community"}</span>
+                      <span>{isPublic ? "Shared" : "Private"}</span>
                     </div>
 
-                    {isOwn && (
-                      <button
-                        className="delete-btn"
-                        onClick={(e) => handleDeleteClick(e, id)}
-                        title="Delete project"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    )}
+                    <button
+                      className="delete-btn"
+                      onClick={(e) => handleDeleteClick(e, id)}
+                      title="Delete project"
+                    >
+                      <Trash2 size={16} />
+                    </button>
                   </div>
 
                   <div className="card-body">
@@ -198,7 +222,6 @@ export default function Home() {
                       <div className="meta">
                         <Clock size={12} />
                         <span>{new Date(timestamp).toLocaleDateString()}</span>
-                        <span>{isOwn ? "By You" : `By ${sharedBy || "Unknown"}`}</span>
                       </div>
                     </div>
                     <div className="arrow">
@@ -220,7 +243,10 @@ export default function Home() {
             </div>
 
             <h3>Delete Project?</h3>
-            <p>This action cannot be undone. The project will be permanently removed.</p>
+            <p>
+              This action cannot be undone. The project will be permanently
+              removed.
+            </p>
 
             <div className="actions">
               <Button className="confirm" onClick={confirmDelete}>
@@ -236,7 +262,10 @@ export default function Home() {
 
       {isDemoOpen && (
         <div className="demo-modal" onClick={() => setIsDemoOpen(false)}>
-          <div className="demo-modal-content" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="demo-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button className="demo-close" onClick={() => setIsDemoOpen(false)}>
               <X size={20} />
             </button>
