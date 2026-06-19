@@ -1,11 +1,11 @@
 import type { Route } from "./+types/home";
 import Navbar from "../../componens/Navbar";
-import { ArrowRight, ArrowUpRight, Clock, Layers } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Clock, Layers, Trash2, AlertTriangle } from "lucide-react";
 import Button from "../../componens/ui/Button";
 import Upload from "../../componens/Upload";
 import { useNavigate } from "react-router";
 import { useEffect, useRef, useState } from "react";
-import { createProject, getProjects } from "../../lib/puter.action";
+import { createProject, getProjects, deleteProject } from "../../lib/puter.action";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -17,6 +17,7 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   const navigate = useNavigate();
   const [projects, setProjects] = useState<DesignItem[]>([]);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
   const isCreatingProjectRef = useRef(false);
 
   const handleUploadComplete = async (base64Image: string) => {
@@ -60,6 +61,20 @@ export default function Home() {
     }
   };
 
+  const handleDeleteClick = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    setDeleteTargetId(id);
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteTargetId) return;
+    await deleteProject(deleteTargetId);
+    setProjects((prev) => prev.filter((p) => p.id !== deleteTargetId));
+    setDeleteTargetId(null);
+  };
+
+  const cancelDelete = () => setDeleteTargetId(null);
+
   useEffect(() => {
     const fetchProjects = async () => {
       const items = await getProjects();
@@ -80,13 +95,13 @@ export default function Home() {
             <div className="pulse"></div>
           </div>
 
-          <p>Introducing Roomify 2.0</p>
+          <p>Introducing VisionArch</p>
         </div>
 
-        <h1>Build beautiful spaces at the speed of thought with Roomify</h1>
+        <h1>Build beautiful spaces at the speed of thought with VisionArch</h1>
 
         <p className="subtitle">
-          Roomify is an AI-first design environment that helps you visualize,
+          VisionArch is an AI-first design environment that helps you visualize,
           render, and ship architectural projects faster than ever.
         </p>
 
@@ -144,6 +159,14 @@ export default function Home() {
                     <div className="badge">
                       <span>Community</span>
                     </div>
+
+                    <button
+                      className="delete-btn"
+                      onClick={(e) => handleDeleteClick(e, id)}
+                      title="Delete project"
+                    >
+                      <Trash2 size={16} />
+                    </button>
                   </div>
 
                   <div className="card-body">
@@ -166,6 +189,28 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {deleteTargetId && (
+        <div className="auth-modal">
+          <div className="panel">
+            <div className="icon">
+              <AlertTriangle className="alert" />
+            </div>
+
+            <h3>Delete Project?</h3>
+            <p>This action cannot be undone. The project will be permanently removed.</p>
+
+            <div className="actions">
+              <Button className="confirm" onClick={confirmDelete}>
+                Delete Project
+              </Button>
+              <button className="cancel" onClick={cancelDelete}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
