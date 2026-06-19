@@ -1,11 +1,11 @@
 import type { Route } from "./+types/home";
 import Navbar from "../../componens/Navbar";
-import { ArrowRight, ArrowUpRight, Clock, Layers, Trash2, AlertTriangle } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Clock, Layers, Trash2, AlertTriangle, X } from "lucide-react";
 import Button from "../../componens/ui/Button";
 import Upload from "../../componens/Upload";
 import { useNavigate } from "react-router";
 import { useEffect, useRef, useState } from "react";
-import { createProject, getProjects, deleteProject } from "../../lib/puter.action";
+import { createProject, getProjects, deleteProject, getPublicProjects } from "../../lib/puter.action";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -18,6 +18,7 @@ export default function Home() {
   const navigate = useNavigate();
   const [projects, setProjects] = useState<DesignItem[]>([]);
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+  const [isDemoOpen, setIsDemoOpen] = useState(false);
   const isCreatingProjectRef = useRef(false);
 
   const handleUploadComplete = async (base64Image: string) => {
@@ -77,9 +78,24 @@ export default function Home() {
 
   useEffect(() => {
     const fetchProjects = async () => {
-      const items = await getProjects();
+      const [myProjects, publicProjects] = await Promise.all([
+        getProjects(),
+        getPublicProjects(),
+      ]);
 
-      setProjects(items);
+      const myProjectIds = new Set(myProjects.map((p: DesignItem) => p.id));
+      const communityProjects = publicProjects.filter(
+        (p: DesignItem) => !myProjectIds.has(p.id),
+      );
+
+      const merged = [
+        ...myProjects.map((p: DesignItem) => ({ ...p, isOwn: true })),
+        ...communityProjects.map((p: DesignItem) => ({ ...p, isOwn: false })),
+      ];
+
+      merged.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+      setProjects(merged);
     };
 
     fetchProjects();
@@ -90,6 +106,10 @@ export default function Home() {
       <Navbar />
 
       <section className="hero">
+        <div className="ambient-blob blob-1" />
+        <div className="ambient-blob blob-2" />
+        <div className="ambient-blob blob-3" />
+
         <div className="announce">
           <div className="dot">
             <div className="pulse"></div>
@@ -110,7 +130,7 @@ export default function Home() {
             Start Building <ArrowRight className="icon" />
           </a>
 
-          <Button variant="outline" size="lg" className="demo">
+          <Button variant="outline" size="lg" className="demo" onClick={() => setIsDemoOpen(true)}>
             Watch Demo
           </Button>
         </div>
@@ -147,7 +167,7 @@ export default function Home() {
 
           <div className="projects-grid">
             {projects.map(
-              ({ id, name, renderedImage, sourceImage, timestamp }) => (
+              ({ id, name, renderedImage, sourceImage, timestamp, isOwn, sharedBy }) => (
                 <div
                   key={id}
                   className="project-card group"
@@ -157,16 +177,18 @@ export default function Home() {
                     <img src={renderedImage || sourceImage} alt="Project" />
 
                     <div className="badge">
-                      <span>Community</span>
+                      <span>{isOwn ? "Mine" : "Community"}</span>
                     </div>
 
-                    <button
-                      className="delete-btn"
-                      onClick={(e) => handleDeleteClick(e, id)}
-                      title="Delete project"
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                    {isOwn && (
+                      <button
+                        className="delete-btn"
+                        onClick={(e) => handleDeleteClick(e, id)}
+                        title="Delete project"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    )}
                   </div>
 
                   <div className="card-body">
@@ -176,7 +198,7 @@ export default function Home() {
                       <div className="meta">
                         <Clock size={12} />
                         <span>{new Date(timestamp).toLocaleDateString()}</span>
-                        <span>By JS Mastery</span>
+                        <span>{isOwn ? "By You" : `By ${sharedBy || "Unknown"}`}</span>
                       </div>
                     </div>
                     <div className="arrow">
@@ -208,6 +230,17 @@ export default function Home() {
                 Cancel
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {isDemoOpen && (
+        <div className="demo-modal" onClick={() => setIsDemoOpen(false)}>
+          <div className="demo-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="demo-close" onClick={() => setIsDemoOpen(false)}>
+              <X size={20} />
+            </button>
+            <video src="/demo.mp4" controls autoPlay className="demo-video" />
           </div>
         </div>
       )}
