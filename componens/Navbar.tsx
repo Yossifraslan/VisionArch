@@ -1,6 +1,7 @@
 import { Box } from "lucide-react";
 import Button from "./ui/Button";
 import { useOutletContext } from "react-router";
+import { Link } from "react-router";
 
 const Navbar = () => {
   const { isSignedIn, userName, signIn, signOut } =
@@ -32,6 +33,10 @@ const Navbar = () => {
             <Box className="logo" />
 
             <span className="name">VisionArch</span>
+          </div>
+
+          <div className="links">
+            <Link to="/community">Community</Link>
           </div>
         </div>
 
