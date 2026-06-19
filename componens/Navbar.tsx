@@ -29,11 +29,11 @@ const Navbar = () => {
     <header className="navbar">
       <nav className="inner">
         <div className="left">
-          <div className="brand">
+          <Link to="/" className="brand">
             <Box className="logo" />
 
             <span className="name">VisionArch</span>
-          </div>
+          </Link>
 
           <div className="links">
             <Link to="/community">Community</Link>
