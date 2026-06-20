@@ -1,6 +1,7 @@
 import { useNavigate, useOutletContext, useParams } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import { generate3DView } from "../../lib/ai.action";
+import { STYLE_MODIFIERS } from "../../lib/constants";
 import { Box, Download, RefreshCcw, Share2, X } from "lucide-react";
 import Button from "../../componens/ui/Button";
 import {
@@ -27,6 +28,7 @@ const VisualizerId = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const [isSharing, setIsSharing] = useState(false);
+  const [selectedStyle, setSelectedStyle] = useState<string>("default");
 
   const handleBack = () => navigate("/");
 
@@ -57,12 +59,15 @@ const VisualizerId = () => {
     }
   };
 
-  const runGeneration = async (item: DesignItem) => {
+  const runGeneration = async (item: DesignItem, style: string = "default") => {
     if (!id || !item.sourceImage) return;
 
     try {
       setIsProcessing(true);
-      const result = await generate3DView({ sourceImage: item.sourceImage });
+      const result = await generate3DView({
+        sourceImage: item.sourceImage,
+        style,
+      });
 
       if (result.renderedImage) {
         setCurrentImage(result.renderedImage);
@@ -91,6 +96,11 @@ const VisualizerId = () => {
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const handleRegenerate = () => {
+    if (!project) return;
+    void runGeneration(project, selectedStyle);
   };
 
   useEffect(() => {
@@ -136,7 +146,7 @@ const VisualizerId = () => {
     }
 
     hasInitialGenerated.current = true;
-    void runGeneration(project);
+    void runGeneration(project, selectedStyle);
   }, [project, isProjectLoading]);
 
   return (
@@ -145,7 +155,7 @@ const VisualizerId = () => {
         <div className="brand">
           <Box className="logo" />
 
-          <span className="name">Roomify</span>
+          <span className="name">VisionArch</span>
         </div>
         <Button variant="ghost" size="sm" onClick={handleBack} className="exit">
           <X className="icon" /> Exit Editor
@@ -162,6 +172,28 @@ const VisualizerId = () => {
             </div>
 
             <div className="panel-actions">
+              <select
+                value={selectedStyle}
+                onChange={(e) => setSelectedStyle(e.target.value)}
+                className="style-select"
+                disabled={isProcessing}
+              >
+                {Object.keys(STYLE_MODIFIERS).map((style) => (
+                  <option key={style} value={style}>
+                    {style.charAt(0).toUpperCase() + style.slice(1)}
+                  </option>
+                ))}
+              </select>
+
+              <Button
+                size="sm"
+                onClick={handleRegenerate}
+                className="regenerate"
+                disabled={isProcessing || !project}
+              >
+                <RefreshCcw className="w-4 h-4 mr-2" /> Regenerate
+              </Button>
+
               <Button
                 size="sm"
                 onClick={handleExport}
