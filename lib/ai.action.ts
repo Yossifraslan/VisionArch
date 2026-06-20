@@ -1,5 +1,5 @@
 import puter from "@heyputer/puter.js";
-import { VISIONARCH_RENDER_PROMPT } from "./constants";
+import { VISIONARCH_RENDER_PROMPT, STYLE_MODIFIERS } from "./constants";
 
 export const fetchAsDataUrl = async (url: string): Promise<string> => {
   const response = await fetch(url);
@@ -18,7 +18,7 @@ export const fetchAsDataUrl = async (url: string): Promise<string> => {
   });
 };
 
-export const generate3DView = async ({ sourceImage }: Generate3DViewParams) => {
+export const generate3DView = async ({ sourceImage, style = "default" }: Generate3DViewParams) => {
   const dataUrl = sourceImage.startsWith("data:")
     ? sourceImage
     : await fetchAsDataUrl(sourceImage);
@@ -28,7 +28,10 @@ export const generate3DView = async ({ sourceImage }: Generate3DViewParams) => {
 
   if (!mimeType || !base64Data) throw new Error("Invalid source image payload");
 
-  const response = await puter.ai.txt2img(VISIONARCH_RENDER_PROMPT, {
+  const styleModifier = STYLE_MODIFIERS[style] || "";
+  const prompt = `${VISIONARCH_RENDER_PROMPT}\n${styleModifier}`.trim();
+
+  const response = await puter.ai.txt2img(prompt, {
     provider: "gemini",
     model: "gemini-2.5-flash-image-preview",
     input_image: base64Data,
