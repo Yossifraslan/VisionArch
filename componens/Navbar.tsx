@@ -36,6 +36,7 @@ const Navbar = () => {
           </Link>
 
           <div className="links">
+            <Link to="/draw">Draw</Link>
             <Link to="/community">Community</Link>
           </div>
         </div>
