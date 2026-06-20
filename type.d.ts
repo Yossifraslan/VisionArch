@@ -13,21 +13,21 @@ interface Material {
 }
 
 interface DesignItem {
-    id: string;
-    name?: string | null;
-    sourceImage: string;
-    sourcePath?: string | null;
-    renderedImage?: string | null;
-    renderedPath?: string | null;
-    publicPath?: string | null;
-    timestamp: number;
-    ownerId?: string | null;
-    sharedBy?: string | null;
-    sharedAt?: string | null;
-    isPublic?: boolean;
-    isOwn?: boolean;
-    score?: number;
-    commentCount?: number;
+  id: string;
+  name?: string | null;
+  sourceImage: string;
+  sourcePath?: string | null;
+  renderedImage?: string | null;
+  renderedPath?: string | null;
+  publicPath?: string | null;
+  timestamp: number;
+  ownerId?: string | null;
+  sharedBy?: string | null;
+  sharedAt?: string | null;
+  isPublic?: boolean;
+  isOwn?: boolean;
+  score?: number;
+  commentCount?: number;
 }
 
 interface DesignConfig {
@@ -127,6 +127,7 @@ interface CreateProjectParams {
 interface Generate3DViewParams {
   sourceImage: string;
   projectId?: string | null;
+  style?: string;
 }
 
 interface ProjectComment {
