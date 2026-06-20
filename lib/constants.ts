@@ -54,3 +54,30 @@ STYLE & LIGHTING:
 - Materials: realistic wood/tile floors, clean walls, subtle shadows.
 - Finish: professional architectural visualization; no text, no watermarks, no logos.
 `.trim();
+
+// Short style modifiers — appended to the base prompt, never replace it.
+// This keeps the strict top-down geometry rules intact while only
+// changing materials/furniture aesthetic.
+export const STYLE_MODIFIERS: Record<string, string> = {
+  default: "",
+  modern: `
+ADDITIONAL STYLE DIRECTION — Modern:
+- Furniture: clean-lined, minimal ornamentation, neutral upholstery (greys, whites, black accents).
+- Materials: matte wood floors, smooth painted walls, occasional matte black fixtures.
+- Keep all geometry, walls, and room mapping rules above unchanged — only adjust furniture style and materials.`,
+  minimalist: `
+ADDITIONAL STYLE DIRECTION — Minimalist:
+- Furniture: sparse, low-profile, only essential pieces per room, no clutter or decorative objects.
+- Materials: white or light grey walls, pale wood or polished concrete floors, abundant negative space.
+- Keep all geometry, walls, and room mapping rules above unchanged — only adjust furniture style and materials.`,
+  industrial: `
+ADDITIONAL STYLE DIRECTION — Industrial:
+- Furniture: raw metal frames, leather or canvas upholstery, exposed hardware.
+- Materials: exposed brick accent walls, polished concrete floors, black metal window frames.
+- Keep all geometry, walls, and room mapping rules above unchanged — only adjust furniture style and materials.`,
+  luxury: `
+ADDITIONAL STYLE DIRECTION — Luxury:
+- Furniture: high-end upholstered pieces, statement lighting fixtures, refined detailing.
+- Materials: marble or polished stone floors, soft warm-toned walls, brass or gold fixture accents.
+- Keep all geometry, walls, and room mapping rules above unchanged — only adjust furniture style and materials.`,
+};
