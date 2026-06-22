@@ -5,6 +5,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useNavigation,
 } from "react-router";
 
 import type { Route } from "./+types/root";
@@ -15,6 +16,7 @@ import {
   signIn as puterSignIn,
   signOut as puterSignOut,
 } from "../lib/puter.action";
+import RouteLoader from "../componens/RouteLoader";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -55,6 +57,9 @@ const DEFAULT_AUTH_STATE: AuthState = {
 
 export default function App() {
   const [authState, setAuthState] = useState<AuthState>(DEFAULT_AUTH_STATE);
+  const navigation = useNavigation();
+  const isNavigating =
+    navigation.state === "loading" || navigation.state === "submitting";
 
   const refreshAuth = async () => {
     try {
@@ -89,7 +94,8 @@ export default function App() {
 
   return (
     <main className="min-h-screen bg-background text-foreground relative z-10">
-      <Outlet context={{ ...authState, refreshAuth, signIn, signOut }} />;
+      <RouteLoader isActive={isNavigating} />
+      <Outlet context={{ ...authState, refreshAuth, signIn, signOut }} />
     </main>
   );
 }
