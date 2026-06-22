@@ -391,3 +391,28 @@ export const deleteComment = async (projectId: string, commentId: string) => {
     return false;
   }
 };
+
+export const renameProject = async (id: string, name: string) => {
+  if (!PUTER_WORKER_URL) return null;
+
+  try {
+    const response = await puter.workers.exec(
+      `${PUTER_WORKER_URL}/api/projects/rename`,
+      {
+        method: "POST",
+        body: JSON.stringify({ id, name }),
+      },
+    );
+
+    if (!response.ok) {
+      console.error("Failed to rename project:", await response.text());
+      return null;
+    }
+
+    const data = (await response.json()) as { project?: DesignItem | null };
+    return data?.project ?? null;
+  } catch (e) {
+    console.error("Failed to rename project:", e);
+    return null;
+  }
+};
