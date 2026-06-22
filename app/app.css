@@ -55,6 +55,68 @@
 }
 
 @layer components {
+  .route-loader {
+    @apply fixed inset-0 z-100 flex items-center justify-center bg-background;
+    animation: loader-fade-in 0.25s ease-out;
+
+    &.is-closing {
+      animation: loader-fade-out 0.3s ease-in forwards;
+    }
+
+    .route-loader-inner {
+      @apply flex items-center justify-center gap-5;
+    }
+
+    .route-loader-svg {
+      @apply w-16 h-16 text-foreground;
+      overflow: visible;
+    }
+
+    .box-stroke {
+      stroke-dasharray: 60;
+      stroke-dashoffset: 60;
+    }
+
+    .box-body {
+      animation: draw-stroke 0.6s ease-out forwards;
+    }
+
+    .box-seam {
+      stroke-dasharray: 12;
+      stroke-dashoffset: 12;
+      animation: draw-stroke 0.3s ease-out 0.4s forwards;
+    }
+
+    .box-lid {
+      stroke-dasharray: 22;
+      stroke-dashoffset: 22;
+      animation: draw-stroke 0.4s ease-out 0.55s forwards;
+      transform-box: fill-box;
+      transform-origin: 50% 100%;
+    }
+
+    .phase-opening .box-lid,
+    .phase-revealed .box-lid,
+    .phase-closing .box-lid {
+      animation:
+        draw-stroke 0.4s ease-out forwards,
+        lid-lift 0.5s ease-in-out 0.1s forwards;
+    }
+
+    .route-loader-text {
+      @apply text-2xl font-serif font-bold tracking-widest text-foreground opacity-0;
+      transform: translateX(-10px);
+      transition:
+        opacity 1.1s ease,
+        transform 1.1s ease;
+
+      &.is-visible {
+        @apply opacity-100;
+        transform: translateX(0);
+      }
+    }
+  }
+
   .demo-modal {
     @apply fixed inset-0 z-60 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4;
 
@@ -324,7 +386,17 @@
           h2 {
             @apply text-2xl font-serif font-bold text-black;
           }
+          .editable-name {
+            @apply text-2xl font-serif font-bold text-black cursor-pointer inline-flex items-center gap-2;
 
+            .edit-icon {
+              @apply opacity-0 text-zinc-400 transition-opacity;
+            }
+
+            &:hover .edit-icon {
+              @apply opacity-100;
+            }
+          }
           h3 {
             @apply text-lg font-serif font-bold text-black;
           }
@@ -892,5 +964,38 @@
   }
   50% {
     transform: translate(-40px, -50px) scale(1.15);
+  }
+}
+
+@keyframes loader-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes loader-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes draw-stroke {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes lid-lift {
+  0% {
+    transform: translateY(0) rotateX(0deg);
+  }
+  100% {
+    transform: translateY(-3px) rotateX(-35deg);
   }
 }
