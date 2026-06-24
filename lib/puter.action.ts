@@ -146,7 +146,7 @@ export const getProjectById = async ({ id }: { id: string }) => {
       if (data?.project) return data.project;
     }
 
-    const publicResponse = await puter.workers.exec(
+    const publicResponse = await fetch(
       `${PUTER_WORKER_URL}/api/projects/public-get?id=${encodeURIComponent(id)}`,
       { method: "GET" },
     );
@@ -254,7 +254,7 @@ export const getPublicProjects = async () => {
   }
 
   try {
-    const response = await puter.workers.exec(
+    const response = await fetch(
       `${PUTER_WORKER_URL}/api/projects/public-list`,
       { method: "GET" },
     );
@@ -328,7 +328,7 @@ export const getComments = async (
   if (!PUTER_WORKER_URL) return [];
 
   try {
-    const response = await puter.workers.exec(
+    const response = await fetch(
       `${PUTER_WORKER_URL}/api/projects/comments?projectId=${encodeURIComponent(projectId)}`,
       { method: "GET" },
     );
