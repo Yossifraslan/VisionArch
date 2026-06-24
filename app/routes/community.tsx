@@ -1,5 +1,13 @@
-import { ArrowUp, ArrowDown, MessageCircle, X, Send, Trash2 } from "lucide-react";
+import {
+  ArrowUp,
+  ArrowDown,
+  MessageCircle,
+  X,
+  Send,
+  Trash2,
+} from "lucide-react";
 import { useEffect, useState } from "react";
+import { useOutletContext } from "react-router";
 import Navbar from "../../componens/Navbar";
 import Button from "../../componens/ui/Button";
 import {
@@ -9,7 +17,6 @@ import {
   getComments,
   addComment,
   deleteComment,
-  getCurrentUser,
 } from "../../lib/puter.action";
 
 const CommentThread = ({
@@ -18,12 +25,14 @@ const CommentThread = ({
   currentUserId,
   onReply,
   onDelete,
+  canInteract,
 }: {
   comment: ProjectComment;
   allComments: ProjectComment[];
   currentUserId: string | null;
   onReply: (parentId: string) => void;
   onDelete: (commentId: string) => void;
+  canInteract: boolean;
 }) => {
   const replies = allComments.filter((c) => c.parentId === comment.id);
 
@@ -37,14 +46,16 @@ const CommentThread = ({
           </span>
         </div>
         <p className="comment-text">{comment.text}</p>
-        <div className="comment-actions">
-          <button onClick={() => onReply(comment.id)}>Reply</button>
-          {comment.authorId === currentUserId && (
-            <button onClick={() => onDelete(comment.id)} className="delete">
-              Delete
-            </button>
-          )}
-        </div>
+        {canInteract && (
+          <div className="comment-actions">
+            <button onClick={() => onReply(comment.id)}>Reply</button>
+            {comment.authorId === currentUserId && (
+              <button onClick={() => onDelete(comment.id)} className="delete">
+                Delete
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {replies.length > 0 && (
@@ -57,6 +68,7 @@ const CommentThread = ({
               currentUserId={currentUserId}
               onReply={onReply}
               onDelete={onDelete}
+              canInteract={canInteract}
             />
           ))}
         </div>
@@ -66,6 +78,8 @@ const CommentThread = ({
 };
 
 export default function Community() {
+  const { isSignedIn, userId, signIn } = useOutletContext<AuthContext>();
+
   const [projects, setProjects] = useState<DesignItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [userVotes, setUserVotes] = useState<Record<string, number>>({});
@@ -73,33 +87,48 @@ export default function Community() {
   const [comments, setComments] = useState<ProjectComment[]>([]);
   const [commentText, setCommentText] = useState("");
   const [replyTo, setReplyTo] = useState<string | null>(null);
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [isCommentsLoading, setIsCommentsLoading] = useState(false);
 
   useEffect(() => {
     const init = async () => {
-      const user = await getCurrentUser();
-      setCurrentUserId(user?.uuid || null);
+      try {
+        const publicProjects = await getPublicProjects();
+        publicProjects.sort((a, b) => (b.score || 0) - (a.score || 0));
+        setProjects(publicProjects);
 
-      const publicProjects = await getPublicProjects();
-      publicProjects.sort((a, b) => (b.score || 0) - (a.score || 0));
-      setProjects(publicProjects);
-
-      const votes: Record<string, number> = {};
-      await Promise.all(
-        publicProjects.map(async (p) => {
-          votes[p.id] = await getMyVote(p.id);
-        }),
-      );
-      setUserVotes(votes);
-
-      setIsLoading(false);
+        if (isSignedIn) {
+          const votes: Record<string, number> = {};
+          await Promise.all(
+            publicProjects.map(async (p) => {
+              try {
+                votes[p.id] = await getMyVote(p.id);
+              } catch {
+                votes[p.id] = 0;
+              }
+            }),
+          );
+          setUserVotes(votes);
+        }
+      } catch (e) {
+        console.error("Failed to load community designs:", e);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     init();
-  }, []);
+  }, [isSignedIn]);
 
   const handleVote = async (projectId: string, direction: 1 | -1) => {
+    if (!isSignedIn) {
+      try {
+        await signIn();
+      } catch (e) {
+        console.error("Sign in failed or was cancelled:", e);
+      }
+      return;
+    }
+
     const currentVote = userVotes[projectId] || 0;
     const newDirection = currentVote === direction ? 0 : direction;
 
@@ -117,9 +146,15 @@ export default function Community() {
   const openComments = async (projectId: string) => {
     setActiveProjectId(projectId);
     setIsCommentsLoading(true);
-    const data = await getComments(projectId);
-    setComments(data);
-    setIsCommentsLoading(false);
+    try {
+      const data = await getComments(projectId);
+      setComments(data);
+    } catch (e) {
+      console.error("Failed to load comments:", e);
+      setComments([]);
+    } finally {
+      setIsCommentsLoading(false);
+    }
   };
 
   const closeComments = () => {
@@ -130,6 +165,15 @@ export default function Community() {
   };
 
   const handleSubmitComment = async () => {
+    if (!isSignedIn) {
+      try {
+        await signIn();
+      } catch (e) {
+        console.error("Sign in failed or was cancelled:", e);
+      }
+      return;
+    }
+
     if (!activeProjectId || !commentText.trim()) return;
 
     const comment = await addComment({
@@ -154,7 +198,7 @@ export default function Community() {
   };
 
   const handleDeleteComment = async (commentId: string) => {
-    if (!activeProjectId) return;
+    if (!isSignedIn || !activeProjectId) return;
     const success = await deleteComment(activeProjectId, commentId);
     if (success) {
       setComments((prev) =>
@@ -186,7 +230,9 @@ export default function Community() {
         {isLoading ? (
           <p className="loading">Loading community designs...</p>
         ) : projects.length === 0 ? (
-          <div className="empty">No community designs shared yet. Be the first!</div>
+          <div className="empty">
+            No community designs shared yet. Be the first!
+          </div>
         ) : (
           <div className="community-grid">
             {projects.map((project) => (
@@ -207,6 +253,7 @@ export default function Community() {
                       <button
                         className={`vote-btn ${userVotes[project.id] === 1 ? "active-up" : ""}`}
                         onClick={() => handleVote(project.id, 1)}
+                        title={!isSignedIn ? "Log in to vote" : undefined}
                       >
                         <ArrowUp size={16} />
                       </button>
@@ -214,6 +261,7 @@ export default function Community() {
                       <button
                         className={`vote-btn ${userVotes[project.id] === -1 ? "active-down" : ""}`}
                         onClick={() => handleVote(project.id, -1)}
+                        title={!isSignedIn ? "Log in to vote" : undefined}
                       >
                         <ArrowDown size={16} />
                       </button>
@@ -248,42 +296,59 @@ export default function Community() {
               {isCommentsLoading ? (
                 <p className="loading">Loading comments...</p>
               ) : topLevelComments.length === 0 ? (
-                <p className="empty-comments">No comments yet. Start the discussion.</p>
+                <p className="empty-comments">
+                  No comments yet. Start the discussion.
+                </p>
               ) : (
                 topLevelComments.map((comment) => (
                   <CommentThread
                     key={comment.id}
                     comment={comment}
                     allComments={comments}
-                    currentUserId={currentUserId}
+                    currentUserId={userId}
                     onReply={setReplyTo}
                     onDelete={handleDeleteComment}
+                    canInteract={isSignedIn}
                   />
                 ))
               )}
             </div>
 
             <div className="comments-input">
-              {replyTo && (
-                <div className="replying-to">
-                  Replying to comment
-                  <button onClick={() => setReplyTo(null)}>
-                    <Trash2 size={12} /> Cancel
-                  </button>
-                </div>
+              {!isSignedIn ? (
+                <button className="login-to-comment" onClick={signIn}>
+                  Log in to join the discussion.
+                </button>
+              ) : (
+                <>
+                  {replyTo && (
+                    <div className="replying-to">
+                      Replying to comment
+                      <button onClick={() => setReplyTo(null)}>
+                        <Trash2 size={12} /> Cancel
+                      </button>
+                    </div>
+                  )}
+                  <div className="input-row">
+                    <input
+                      type="text"
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                      placeholder="Add a comment..."
+                      onKeyDown={(e) =>
+                        e.key === "Enter" && handleSubmitComment()
+                      }
+                    />
+                    <Button
+                      size="sm"
+                      onClick={handleSubmitComment}
+                      disabled={!commentText.trim()}
+                    >
+                      <Send size={16} />
+                    </Button>
+                  </div>
+                </>
               )}
-              <div className="input-row">
-                <input
-                  type="text"
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                  placeholder="Add a comment..."
-                  onKeyDown={(e) => e.key === "Enter" && handleSubmitComment()}
-                />
-                <Button size="sm" onClick={handleSubmitComment} disabled={!commentText.trim()}>
-                  <Send size={16} />
-                </Button>
-              </div>
             </div>
           </div>
         </div>
