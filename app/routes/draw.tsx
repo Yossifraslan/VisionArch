@@ -1,9 +1,15 @@
-import { Tldraw, useEditor } from "tldraw";
+import {
+  Tldraw,
+  useEditor,
+  createShapeId,
+  renderRichTextFromHTML,
+} from "tldraw";
 import "tldraw/tldraw.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router";
-import { Box, X, Sparkles } from "lucide-react";
+import { Box, X, Sparkles, LayoutTemplate, AlertTriangle } from "lucide-react";
 import { createProject } from "../../lib/puter.action";
+import { FLOOR_PLAN_TEMPLATES } from "../../lib/templates";
 
 const blobToBase64 = (blob: Blob): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -12,6 +18,151 @@ const blobToBase64 = (blob: Blob): Promise<string> => {
     reader.onerror = reject;
     reader.readAsDataURL(blob);
   });
+};
+
+const HINT_STORAGE_KEY = "visionarch_draw_hint_seen";
+
+const DrawHint = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const seen = localStorage.getItem(HINT_STORAGE_KEY);
+    if (!seen) {
+      setIsVisible(true);
+    }
+  }, []);
+
+  const dismiss = () => {
+    localStorage.setItem(HINT_STORAGE_KEY, "true");
+    setIsVisible(false);
+  };
+
+  if (!isVisible) return null;
+
+  return (
+    <div className="draw-hint">
+      <p>
+        <strong>Sketch your rooms</strong>, then hit{" "}
+        <strong>Generate 3D Render</strong> to bring it to life. Or load a
+        template to get started fast.
+      </p>
+      <button onClick={dismiss}>
+        <X size={16} />
+      </button>
+    </div>
+  );
+};
+
+const TemplatesMenu = () => {
+  const editor = useEditor();
+  const [isOpen, setIsOpen] = useState(false);
+  const [pendingTemplateKey, setPendingTemplateKey] = useState<string | null>(
+    null,
+  );
+
+  const applyTemplate = (templateKey: string) => {
+    const template = FLOOR_PLAN_TEMPLATES[templateKey];
+    if (!template) return;
+
+    const existingIds = Array.from(editor.getCurrentPageShapeIds());
+    if (existingIds.length > 0) {
+      editor.deleteShapes(existingIds);
+    }
+
+    const shapes = template.shapes.map((shape) => ({
+      id: createShapeId(),
+      type: "geo" as const,
+      x: shape.x,
+      y: shape.y,
+      props: {
+        geo: "rectangle" as const,
+        w: shape.w,
+        h: shape.h,
+        color: "black" as const,
+        fill: "none" as const,
+        richText: renderRichTextFromHTML(editor, shape.label),
+      },
+    }));
+
+    editor.createShapes(shapes);
+    editor.zoomToFit();
+    setIsOpen(false);
+  };
+
+  const handleSelectTemplate = (templateKey: string) => {
+    const existingIds = Array.from(editor.getCurrentPageShapeIds());
+
+    if (existingIds.length > 0) {
+      setPendingTemplateKey(templateKey);
+      setIsOpen(false);
+      return;
+    }
+
+    applyTemplate(templateKey);
+  };
+
+  const confirmApply = () => {
+    if (pendingTemplateKey) {
+      applyTemplate(pendingTemplateKey);
+    }
+    setPendingTemplateKey(null);
+  };
+
+  const cancelApply = () => setPendingTemplateKey(null);
+
+  return (
+    <>
+      <div className="templates-menu">
+        <button
+          className="templates-trigger"
+          onClick={() => setIsOpen((prev) => !prev)}
+        >
+          <LayoutTemplate size={16} />
+          Templates
+        </button>
+
+        {isOpen && (
+          <div className="templates-dropdown">
+            {Object.entries(FLOOR_PLAN_TEMPLATES).map(([key, template]) => (
+              <button
+                key={key}
+                className="template-option"
+                onClick={() => handleSelectTemplate(key)}
+              >
+                <span className="template-name">{template.name}</span>
+                <span className="template-desc">{template.description}</span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {pendingTemplateKey && (
+        <div className="auth-modal">
+          <div className="panel">
+            <div className="icon">
+              <AlertTriangle className="alert" />
+            </div>
+
+            <h3>Replace Current Drawing?</h3>
+            <p>
+              Loading this template will clear your current drawing. This can't
+              be undone.
+            </p>
+
+            <div className="actions">
+              <button className="confirm btn" onClick={confirmApply}>
+                Load Template
+              </button>
+              <button className="cancel" onClick={cancelApply}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 };
 
 const DrawCanvas = () => {
@@ -81,16 +232,24 @@ const DrawCanvas = () => {
   };
 
   return (
-    <div className="draw-overlay-ui">
-      <button
-        className="draw-generate-btn"
-        onClick={handleGenerate}
-        disabled={isGenerating}
-      >
-        <Sparkles size={16} />
-        {isGenerating ? "Generating..." : "Generate 3D Render"}
-      </button>
-    </div>
+    <>
+      <div className="draw-overlay-ui">
+        <button
+          className="draw-generate-btn"
+          onClick={handleGenerate}
+          disabled={isGenerating}
+        >
+          <Sparkles size={16} />
+          {isGenerating ? "Generating..." : "Generate 3D Render"}
+        </button>
+      </div>
+
+      <div className="draw-templates-ui">
+        <TemplatesMenu />
+      </div>
+
+      <DrawHint />
+    </>
   );
 };
 
