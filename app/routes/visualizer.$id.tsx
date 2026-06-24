@@ -1,14 +1,15 @@
-import { useNavigate, useOutletContext, useParams } from "react-router";
+import { useNavigate, useOutletContext, useParams, Link } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import { generate3DView } from "../../lib/ai.action";
 import { STYLE_MODIFIERS } from "../../lib/constants";
-import { Box, Download, RefreshCcw, Share2, X } from "lucide-react";
+import { Box, Download, RefreshCcw, Share2, X, Pencil } from "lucide-react";
 import Button from "../../componens/ui/Button";
 import {
   createProject,
   getProjectById,
   shareProject,
   unshareProject,
+  renameProject,
 } from "../../lib/puter.action";
 import {
   ReactCompareSlider,
@@ -29,6 +30,10 @@ const VisualizerId = () => {
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const [isSharing, setIsSharing] = useState(false);
   const [selectedStyle, setSelectedStyle] = useState<string>("default");
+
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [nameInput, setNameInput] = useState("");
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
   const handleBack = () => navigate("/");
 
@@ -58,6 +63,37 @@ const VisualizerId = () => {
       setIsSharing(false);
     }
   };
+
+  const startEditingName = () => {
+    setNameInput(project?.name || "");
+    setIsEditingName(true);
+  };
+
+  const saveNameEdit = async () => {
+    setIsEditingName(false);
+
+    if (!project || !nameInput.trim() || nameInput.trim() === project.name) {
+      return;
+    }
+
+    const updated = await renameProject(project.id, nameInput.trim());
+    if (updated) setProject(updated);
+  };
+
+  const handleNameKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.currentTarget.blur();
+    } else if (e.key === "Escape") {
+      setIsEditingName(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isEditingName && nameInputRef.current) {
+      nameInputRef.current.focus();
+      nameInputRef.current.select();
+    }
+  }, [isEditingName]);
 
   const runGeneration = async (item: DesignItem, style: string = "default") => {
     if (!id || !item.sourceImage) return;
@@ -152,11 +188,11 @@ const VisualizerId = () => {
   return (
     <div className="visualizer">
       <nav className="topbar">
-        <div className="brand">
+        <Link to="/" className="brand">
           <Box className="logo" />
 
           <span className="name">VisionArch</span>
-        </div>
+        </Link>
         <Button variant="ghost" size="sm" onClick={handleBack} className="exit">
           <X className="icon" /> Exit Editor
         </Button>
@@ -167,7 +203,24 @@ const VisualizerId = () => {
           <div className="panel-header">
             <div className="panel-meta">
               <p>Project</p>
-              <h2>{project?.name || `Residence ${id}`}</h2>
+
+              {isEditingName ? (
+                <input
+                  ref={nameInputRef}
+                  type="text"
+                  value={nameInput}
+                  onChange={(e) => setNameInput(e.target.value)}
+                  onBlur={saveNameEdit}
+                  onKeyDown={handleNameKeyDown}
+                  className="name-edit-input"
+                />
+              ) : (
+                <h2 className="editable-name" onClick={startEditingName}>
+                  {project?.name || `Residence ${id}`}
+                  <Pencil size={14} className="edit-icon" />
+                </h2>
+              )}
+
               <p className="note">Created by You</p>
             </div>
 
