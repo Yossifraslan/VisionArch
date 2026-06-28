@@ -124,7 +124,10 @@ const VisualizerId = () => {
 
         if (saved) {
           setProject(saved);
-          setCurrentImage(saved.renderedImage || result.renderedImage);
+          // Note: intentionally NOT calling setCurrentImage(saved.renderedImage) here.
+          // result.renderedImage is the fresh base64 data straight from generation —
+          // saved.renderedImage may be a hosted URL that hasn't fully propagated yet,
+          // which previously caused the UI to show a stale image until manual refresh.
         }
       }
     } catch (error) {
@@ -309,19 +312,19 @@ const VisualizerId = () => {
             {project?.sourceImage && currentImage ? (
               <ReactCompareSlider
                 defaultValue={50}
-                style={{ width: "100%", height: "auto" }}
+                style={{ width: "100%", height: "100%" }}
                 itemOne={
                   <ReactCompareSliderImage
                     src={project?.sourceImage}
                     alt="before"
-                    className="compare-img"
+                    style={{ objectFit: "contain", objectPosition: "center" }}
                   />
                 }
                 itemTwo={
                   <ReactCompareSliderImage
                     src={currentImage || project?.renderedImage || undefined}
                     alt="after"
-                    className="compare-img"
+                    style={{ objectFit: "contain", objectPosition: "center" }}
                   />
                 }
               />
@@ -343,3 +346,4 @@ const VisualizerId = () => {
   );
 };
 export default VisualizerId;
+
