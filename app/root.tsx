@@ -11,6 +11,7 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import { useEffect, useState } from "react";
+import puter from "@heyputer/puter.js";
 import {
   getCurrentUser,
   signIn as puterSignIn,
@@ -63,6 +64,16 @@ export default function App() {
 
   const refreshAuth = async () => {
     try {
+      // isSignedIn() is a local, synchronous check — it never triggers
+      // Puter's consent/sign-in popup. Only call getCurrentUser() (which
+      // hits getUser() and can prompt the user) if there's already a
+      // session to confirm. This stops the Puter modal from appearing
+      // for visitors who have never signed in.
+      if (!puter.auth.isSignedIn()) {
+        setAuthState(DEFAULT_AUTH_STATE);
+        return false;
+      }
+
       const user = await getCurrentUser();
 
       setAuthState({
@@ -128,3 +139,5 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     </main>
   );
 }
+
+////
