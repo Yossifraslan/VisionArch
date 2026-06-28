@@ -482,6 +482,7 @@
 
         .compare-stage {
           @apply relative bg-zinc-100 overflow-hidden;
+          aspect-ratio: 1 / 1;
         }
 
         .compare-fallback {
@@ -489,7 +490,7 @@
         }
 
         .compare-img {
-          @apply w-full h-auto object-contain;
+          @apply w-full h-full object-contain;
         }
       }
     }
