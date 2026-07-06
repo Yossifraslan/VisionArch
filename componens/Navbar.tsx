@@ -14,7 +14,6 @@ const Navbar = () => {
       } catch (e) {
         console.error(`Puter sign out failed: ${e}`);
       }
-
       return;
     }
 
@@ -31,7 +30,6 @@ const Navbar = () => {
         <div className="left">
           <Link to="/" className="brand">
             <Box className="logo" />
-
             <span className="name">VisionArch</span>
           </Link>
 
@@ -58,9 +56,9 @@ const Navbar = () => {
                 Log In
               </Button>
 
-              <a href="#upload" className="cta">
+              <button className="cta" onClick={signIn}>
                 Get Started
-              </a>
+              </button>
             </>
           )}
         </div>
