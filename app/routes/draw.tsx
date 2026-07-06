@@ -6,7 +6,7 @@ import {
 } from "tldraw";
 import "tldraw/tldraw.css";
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router";
+import { useNavigate, Link, useOutletContext } from "react-router";
 import { Box, X, Sparkles, LayoutTemplate, AlertTriangle } from "lucide-react";
 import { createProject } from "../../lib/puter.action";
 import { FLOOR_PLAN_TEMPLATES } from "../../lib/templates";
@@ -255,6 +255,33 @@ const DrawCanvas = () => {
 
 export default function Draw() {
   const navigate = useNavigate();
+  const { isSignedIn, signIn } = useOutletContext<AuthContext>();
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    const check = async () => {
+      if (!isSignedIn) {
+        try {
+          await signIn();
+          setIsCheckingAuth(false);
+        } catch {
+          navigate("/");
+        }
+      } else {
+        setIsCheckingAuth(false);
+      }
+    };
+
+    check();
+  }, [isSignedIn]);
+
+  if (isCheckingAuth && !isSignedIn) {
+    return (
+      <div className="draw-auth-guard">
+        <p>Signing you in...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="draw-page">
