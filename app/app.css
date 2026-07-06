@@ -455,7 +455,8 @@
             @apply bg-white px-6 py-4 rounded-xl border border-zinc-200 flex flex-col items-center shadow-2xl;
 
             .spinner {
-              @apply w-8 h-8 mb-3 animate-spin text-primary;
+              @apply w-8 h-8 mb-3 text-primary;
+              animation: spin-reverse 1s linear infinite;
             }
 
             .title {
@@ -935,6 +936,13 @@
       > * {
         @apply pointer-events-auto;
       }
+      .draw-auth-guard {
+        @apply fixed inset-0 flex items-center justify-center bg-background;
+
+        p {
+          @apply text-sm text-zinc-500 font-mono uppercase tracking-widest;
+        }
+      }
     }
 
     .templates-menu {
@@ -1045,5 +1053,14 @@
   }
   100% {
     transform: translateY(-3px) rotateX(-35deg);
+  }
+}
+
+@keyframes spin-reverse {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
   }
 }
