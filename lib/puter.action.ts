@@ -416,3 +416,14 @@ export const renameProject = async (id: string, name: string) => {
     return null;
   }
 };
+
+export const pingWorker = async () => {
+  if (!PUTER_WORKER_URL) return;
+  try {
+    await fetch(`${PUTER_WORKER_URL}/api/projects/public-list`, {
+      method: "GET",
+    });
+  } catch {
+    
+  }
+};
