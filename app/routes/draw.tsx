@@ -297,7 +297,10 @@ export default function Draw() {
       </div>
 
       <div className="draw-canvas-wrap">
-        <Tldraw persistenceKey="visionarch-draw">
+        <Tldraw
+          persistenceKey="visionarch-draw"
+          licenseKey={import.meta.env.VITE_TLDRAW_LICENSE_KEY}
+        >
           <DrawCanvas />
         </Tldraw>
       </div>
