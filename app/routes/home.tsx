@@ -19,6 +19,7 @@ import {
   deleteProject,
   getPublicProjects,
   getCurrentUser,
+  pingWorker,
 } from "../../lib/puter.action";
 
 export function meta({}: Route.MetaArgs) {
@@ -92,8 +93,12 @@ export default function Home() {
 
   useEffect(() => {
     const fetchProjects = async () => {
+      await pingWorker();
+
       const user = await getCurrentUser();
       const currentUserId = user?.uuid || null;
+
+      if (!currentUserId) return;
 
       const [myPrivateProjects, allPublicProjects] = await Promise.all([
         getProjects(),
@@ -107,9 +112,7 @@ export default function Home() {
         : [];
 
       const myProjects = [...myPrivateProjects, ...myPublicProjects];
-
       myProjects.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-
       setProjects(myProjects);
     };
 
