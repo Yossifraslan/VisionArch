@@ -15,13 +15,11 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
+    @apply scroll-smooth;
   }
 
   body {
-    background-color: #faf6f0;
-    color: #1a1a1a;
-    font-family: Inter, sans-serif;
+    @apply font-sans bg-background text-foreground;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -31,7 +29,7 @@
   h4,
   h5,
   h6 {
-    font-family: "Instrument Serif", serif;
+    @apply font-serif;
   }
 
   /* Custom Scrollbar */
