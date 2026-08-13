@@ -32,9 +32,6 @@ export default function About() {
             <Link to="/draw" className="btn btn--primary btn--md">
               Start Building
             </Link>
-            <Link to="/visualizer" className="btn btn--outline btn--md">
-              View Samples
-            </Link>
           </div>
         </section>
 
