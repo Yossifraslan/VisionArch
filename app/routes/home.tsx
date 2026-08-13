@@ -1,5 +1,6 @@
 import type { Route } from "./+types/home";
 import Navbar from "../../componens/Navbar";
+import Footer from "../../componens/Footer";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -276,6 +277,7 @@ export default function Home() {
           </div>
         </div>
       )}
+      <Footer />
     </div>
   );
 }
