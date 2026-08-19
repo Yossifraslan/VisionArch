@@ -13,6 +13,8 @@ open this link, and create an account from puter.com itself then open my website
 because the sign in page is from puter. Also I had some friends to test it out and they were able to login through Phone number verification. 
 
 and in the project itself, next to start building there is a `watch demo` video. Watch it to see the project.
+
+<video controls src="public/demo.mp4" title="Demo video"></video>
 ---
 
 ## Credits
