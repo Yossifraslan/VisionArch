@@ -6,7 +6,8 @@ import {
 import { isHostedUrl } from "./utils";
 import { PUTER_WORKER_URL } from "./constants";
 
-export const signIn = async () => await puter.auth.signIn();
+export const signIn = async () =>
+  await puter.auth.signIn({ attempt_temp_user_creation: true });
 
 export const signOut = () => puter.auth.signOut();
 
