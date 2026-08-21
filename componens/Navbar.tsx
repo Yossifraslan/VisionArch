@@ -56,7 +56,7 @@ const Navbar = () => {
                 Log In
               </Button>
 
-              <button className="cta" onClick={signIn}>
+              <button className="cta" onClick={handleAuthClick}>
                 Get Started
               </button>
             </>
