@@ -95,6 +95,9 @@ type AuthContext = {
   refreshAuth: () => Promise<boolean>;
   signIn: () => Promise<boolean>;
   signOut: () => Promise<boolean>;
+
+  isDark: boolean;
+  toggleDark: () => void;
 };
 
 type AuthRequiredModalProps = {
