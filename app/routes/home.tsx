@@ -125,10 +125,6 @@ export default function Home() {
       <Navbar />
 
       <section className="hero">
-        <div className="ambient-blob blob-1" />
-        <div className="ambient-blob blob-2" />
-        <div className="ambient-blob blob-3" />
-
         <div className="announce">
           <div className="dot">
             <div className="pulse"></div>
@@ -190,16 +186,12 @@ export default function Home() {
 
           <div className="projects-grid">
             {projects.map(
-              ({
-                id,
-                name,
-                renderedImage,
-                sourceImage,
-                timestamp,
-                isPublic,
-              }) => (
+              (
+                { id, name, renderedImage, sourceImage, timestamp, isPublic },
+                index,
+              ) => (
                 <div
-                  key={id}
+                  key={`${id}-${index}`}
                   className="project-card group"
                   onClick={() => navigate(`/visualizer/${id}`)}
                 >
