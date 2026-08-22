@@ -1,10 +1,10 @@
-import { Box } from "lucide-react";
+import { Box, Moon, Sun } from "lucide-react";
 import Button from "./ui/Button";
 import { useOutletContext } from "react-router";
 import { Link } from "react-router";
 
 const Navbar = () => {
-  const { isSignedIn, userName, signIn, signOut } =
+  const { isSignedIn, userName, signIn, signOut, isDark, toggleDark } =
     useOutletContext<AuthContext>();
 
   const handleAuthClick = async () => {
@@ -40,6 +40,16 @@ const Navbar = () => {
         </div>
 
         <div className="actions">
+          <button
+            type="button"
+            className="dark-mode-toggle"
+            onClick={toggleDark}
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            title={isDark ? "Light mode" : "Dark mode"}
+          >
+            {isDark ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+
           {isSignedIn ? (
             <>
               <span className="greeting">
