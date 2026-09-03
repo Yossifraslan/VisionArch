@@ -1,8 +1,8 @@
 # VisionArch
 
-AI-powered floor plan to 3D architectural visualization, with a community to share and discuss designs.
+Floor plan to 3D-style architectural visualization, with a community to share and discuss designs.
 
-VisionArch transforms a 2D floor plan - uploaded as an image or sketched directly in-app - into a photorealistic, top-down 3D render. Compare before/after, try different interior styles, save your work, and share it with the community to get votes and feedback.
+VisionArch transforms a 2D floor plan - uploaded as an image or sketched directly in-app - into a polished top-down 3D-style render. Compare before/after, try different interior styles, save your work, and share it with the community to get votes and feedback.
 
 Repo: github.com/Yossifraslan/VisionArch
 
@@ -31,10 +31,10 @@ The drawing canvas is powered by tldraw, an open-source (MIT licensed) infinite 
 
 ### Core
 
-- Upload a floor plan image and generate a photorealistic, top-down 3D render using AI (Gemini via Puter.js)
+- Upload a floor plan image and generate a polished, top-down 3D-style render locally in the browser
 - Draw your own floor plan from scratch on a full freehand canvas (powered by tldraw) - sketch shapes, rooms, and labels, then generate a render directly from your drawing
 - Floor plan templates - load a pre-made starter layout (Studio, 1-Bedroom, 2-Bedroom, Open Loft, Family Home) onto the canvas instead of starting blank
-- Before/after comparison slider to see the original plan next to the AI-generated render
+- Before/after comparison slider to see the original plan next to the rendered visualization
 - Style selector - regenerate the same floor plan in Modern, Minimalist, Industrial, or Luxury styles, without losing the strict floor plan geometry
 - Export your render as a downloadable image
 
@@ -64,7 +64,7 @@ The drawing canvas is powered by tldraw, an open-source (MIT licensed) infinite 
 - React Router v7 (framework mode, SSR)
 - TypeScript
 - Tailwind CSS v4
-- Puter.js - authentication, key-value storage, AI image generation (Gemini), and a custom Puter Worker (serverless backend) for all project/vote/comment APIs
+- Puter.js - authentication, key-value storage, and a custom Puter Worker (serverless backend) for all project/vote/comment APIs
 - tldraw - drawing canvas SDK
 - react-compare-slider - before/after image comparison
 - lucide-react - icons
@@ -80,9 +80,9 @@ The drawing canvas is powered by tldraw, an open-source (MIT licensed) infinite 
    - Uploading an image (JPG/PNG)
    - Drawing one from scratch or starting from a template on the /draw canvas
 
-3. VisionArch sends the image to an AI model (Gemini 2.5 Flash Image, via Puter) with a strict prompt that preserves wall geometry, doors, and windows while generating realistic materials and furniture
+3. VisionArch processes the image locally into a styled, architectural visualization that keeps the floor-plan structure readable while enhancing the presentation
 
-4. Compare the original plan against the 3D render with a drag slider
+4. Compare the original plan against the 3D-style render with a drag slider
 
 5. Try different interior styles, export the result, rename the project, or share it to the community feed
 
