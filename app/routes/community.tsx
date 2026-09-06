@@ -13,7 +13,6 @@ import Button from "../../componens/ui/Button";
 import {
   getPublicProjects,
   voteOnProject,
-  getMyVote,
   getComments,
   addComment,
   deleteComment,
@@ -95,20 +94,6 @@ export default function Community() {
         const publicProjects = await getPublicProjects();
         publicProjects.sort((a, b) => (b.score || 0) - (a.score || 0));
         setProjects(publicProjects);
-
-        if (isSignedIn) {
-          const votes: Record<string, number> = {};
-          await Promise.all(
-            publicProjects.map(async (p) => {
-              try {
-                votes[p.id] = await getMyVote(p.id);
-              } catch {
-                votes[p.id] = 0;
-              }
-            }),
-          );
-          setUserVotes(votes);
-        }
       } catch (e) {
         console.error("Failed to load community designs:", e);
       } finally {
