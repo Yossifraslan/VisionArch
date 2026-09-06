@@ -14,24 +14,17 @@ const Button = ({
   children,
   ...props
 }: ButtonProps) => {
-  const baseClass = 'btn';
-  const variantClass = `btn--${variant}`;
-  const sizeClass = `btn--${size}`;
-  const fullWidthClass = fullWidth ? 'btn--full' : '';
+  const classes = [
+    "btn",
+    `btn--${variant}`,
+    `btn--${size}`,
+    fullWidth && "btn--full",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-  const combinedClasses = [
-    baseClass,
-    variantClass,
-    sizeClass,
-    fullWidthClass,
-    className
-  ].filter(Boolean).join(' ');
-
-  return (
-    <button className={combinedClasses} {...props}>
-      {children}
-    </button>
-  );
+  return <button className={classes} {...props}>{children}</button>;
 };
 
 export default Button;
