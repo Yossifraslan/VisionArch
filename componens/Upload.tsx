@@ -1,7 +1,11 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react'
-import {useOutletContext} from "react-router";
-import {CheckCircle2, ImageIcon, UploadIcon} from "lucide-react";
-import {PROGRESS_INCREMENT, REDIRECT_DELAY_MS, PROGRESS_INTERVAL_MS} from "../lib/constants";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useOutletContext } from "react-router";
+import { CheckCircle2, ImageIcon, UploadIcon } from "lucide-react";
+import {
+    PROGRESS_INCREMENT,
+    REDIRECT_DELAY_MS,
+    PROGRESS_INTERVAL_MS,
+} from "../lib/constants";
 
 interface UploadProps {
     onComplete?: (base64Data: string) => void;
@@ -81,7 +85,7 @@ const Upload = ({ onComplete }: UploadProps) => {
         if (!isSignedIn) return;
 
         const droppedFile = e.dataTransfer.files[0];
-        const allowedTypes = ['image/jpeg', 'image/png'];
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
         if (droppedFile && allowedTypes.includes(droppedFile.type)) {
             processFile(droppedFile);
         }
@@ -118,9 +122,9 @@ const Upload = ({ onComplete }: UploadProps) => {
                             <UploadIcon size={20} />
                         </div>
                         <p>
-                            {isSignedIn ? (
-                                "Click to upload or just drag and drop"
-                            ): ("Sign in or sign up with Puter to upload")}
+                            {isSignedIn
+                                ? "Click to upload or drag and drop"
+                                : "Sign in or sign up with Puter to upload"}
                         </p>
                         <p className="help">Maximum file size 50 MB.</p>
                     </div>
@@ -131,14 +135,14 @@ const Upload = ({ onComplete }: UploadProps) => {
                         <div className="status-icon">
                             {progress === 100 ? (
                                 <CheckCircle2 className="check" />
-                            ): (
+                            ) : (
                                 <ImageIcon className="image" />
                             )}
                         </div>
 
                         <h3>{file.name}</h3>
 
-                        <div className='progress'>
+                        <div className="progress">
                             <div className="bar" style={{ width: `${progress}%` }} />
 
                             <p className="status-text">
