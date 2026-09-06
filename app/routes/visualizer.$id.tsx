@@ -1,4 +1,10 @@
-import { useNavigate, useOutletContext, useParams, Link } from "react-router";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useOutletContext,
+  useParams,
+} from "react-router";
 import { useEffect, useRef, useState } from "react";
 import { generate3DView } from "../../lib/ai.action";
 import { STYLE_MODIFIERS } from "../../lib/constants";
@@ -16,10 +22,19 @@ import {
   ReactCompareSliderImage,
 } from "react-compare-slider";
 
+type VisualizerNavigationState = {
+  initialImage?: string;
+  initialRendered?: string | null;
+  name?: string;
+};
+
 const VisualizerId = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { userId } = useOutletContext<AuthContext>();
+
+  const navigationState = location.state as VisualizerNavigationState | null;
 
   const hasInitialGenerated = useRef(false);
 
@@ -153,6 +168,24 @@ const VisualizerId = () => {
 
       setIsProjectLoading(true);
 
+      if (navigationState?.initialImage) {
+        const initialProject: DesignItem = {
+          id,
+          name: navigationState.name || `Residence ${id}`,
+          sourceImage: navigationState.initialImage,
+          renderedImage: navigationState.initialRendered || undefined,
+          timestamp: Date.now(),
+          ownerId: userId,
+          isPublic: false,
+        };
+
+        setProject(initialProject);
+        setCurrentImage(initialProject.renderedImage || null);
+        setIsProjectLoading(false);
+        hasInitialGenerated.current = false;
+        return;
+      }
+
       const fetchedProject = await getProjectById({ id });
 
       if (!isMounted) return;
@@ -168,7 +201,7 @@ const VisualizerId = () => {
     return () => {
       isMounted = false;
     };
-  }, [id]);
+  }, [id, navigationState, userId]);
 
   useEffect(() => {
     if (
