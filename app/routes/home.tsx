@@ -25,8 +25,11 @@ import {
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "VisionArch | Shape the room" },
+    {
+      name: "description",
+      content: "Turn floor plans into clear, shareable design studies.",
+    },
   ];
 }
 
