@@ -317,8 +317,7 @@ export const getMyVote = async (projectId: string) => {
 
     const data = (await response.json()) as { direction: number };
     return data?.direction ?? 0;
-  } catch (e) {
-    console.error("Failed to get vote:", e);
+  } catch {
     return 0;
   }
 };
