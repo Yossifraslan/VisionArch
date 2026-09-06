@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #faf6f0;
-  --color-foreground: #1a1a1a;
+  --color-background: #f4f1eb;
+  --color-foreground: #202321;
   --color-surface: #ffffff;
-  --color-surface-highlight: #eef1ee;
-  --color-primary: #00eee6;
-  --color-secondary: #edc400;
-  --color-accent: #ed00bc;
-  --font-serif: "Instrument Serif", serif;
-  --font-sans: Inter, sans-serif;
-  --shadow-neobrutalism: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+  --color-surface-highlight: #e8ece8;
+  --color-primary: #176b62;
+  --color-secondary: #d29b2e;
+  --color-accent: #c75b48;
+  --font-serif: "DM Serif Display", Georgia, serif;
+  --font-sans: "DM Sans", sans-serif;
+  --shadow-neobrutalism: 0 4px 14px rgba(32, 35, 33, 0.12);
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -39,6 +39,11 @@
   body {
     @apply font-sans bg-background text-foreground;
     -webkit-font-smoothing: antialiased;
+    background-image: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.42),
+      transparent 45%
+    );
   }
 
   h1,
@@ -142,6 +147,22 @@
 
     .preview-video {
       @apply w-full h-auto max-h-[80vh];
+    }
+  }
+
+  .demo-modal {
+    @apply fixed inset-0 z-60 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4;
+
+    .demo-modal-content {
+      @apply relative w-full max-w-4xl overflow-hidden rounded-xl bg-black shadow-2xl;
+    }
+
+    .demo-close {
+      @apply absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/60 text-white transition-colors hover:bg-black/85;
+    }
+
+    .demo-video {
+      @apply block h-auto max-h-[80vh] w-full;
     }
   }
 
@@ -261,6 +282,7 @@
     }
   }
 
+  .navbar,
   .studio-header {
     position: fixed;
     inset: 0 0 auto 0;
@@ -413,7 +435,7 @@
     }
   }
 
-  .image-upload {
+  .upload {
     @apply w-full;
 
     .dropzone {
@@ -480,6 +502,7 @@
     }
   }
 
+  .visualizer,
   .render-studio {
     @apply min-h-screen bg-background pt-6 pb-10 px-4 md:px-6 flex flex-col items-center font-sans relative;
 
@@ -1011,9 +1034,11 @@
     }
   }
 
+  .draw-page,
   .canvas-editor {
     @apply fixed inset-0 z-40 flex flex-col bg-white;
 
+    .draw-topbar,
     .canvas-topbar {
       @apply h-14 flex items-center justify-between px-6 border-b border-zinc-200 bg-white z-50 relative;
 
@@ -1027,15 +1052,18 @@
         }
       }
 
+      .draw-exit,
       .canvas-exit {
         @apply flex items-center gap-2 text-sm font-medium text-zinc-500 hover:text-black transition-colors;
       }
     }
 
+    .draw-canvas-wrap,
     .canvas-wrap {
       @apply flex-1 relative;
     }
 
+    .draw-overlay-ui,
     .canvas-overlay-ui {
       @apply absolute bottom-12 right-4 z-50 pointer-events-none;
       > * {
@@ -1043,16 +1071,19 @@
       }
     }
 
+    .draw-generate-btn,
     .canvas-generate-btn {
       @apply flex items-center gap-2 px-4 py-2.5 rounded-md bg-primary text-white text-sm font-bold uppercase tracking-wide shadow-lg hover:bg-[#00d9d2] transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
     }
 
+    .draw-templates-ui,
     .canvas-templates-ui {
       @apply absolute bottom-1 left-24.5 z-50 pointer-events-none;
       > * {
         @apply pointer-events-auto;
       }
 
+      .draw-auth-guard,
       .canvas-auth-guard {
         @apply fixed inset-0 flex items-center justify-center bg-background;
         p {
@@ -1083,6 +1114,7 @@
       }
     }
 
+    .draw-hint,
     .canvas-hint {
       @apply absolute top-20 left-4 z-50 max-w-sm bg-white border border-zinc-200 rounded-lg shadow-xl p-4 flex items-start gap-3;
 
@@ -1145,6 +1177,7 @@
   color: var(--color-foreground);
 }
 
+.dark .navbar,
 .dark .studio-header {
   background-color: rgba(17, 17, 17, 0.9);
   border-bottom-color: rgba(255, 255, 255, 0.08);
@@ -1248,6 +1281,7 @@
   }
 }
 
+.dark .upload,
 .dark .image-upload {
   .dropzone {
     background: var(--dark-panel);
@@ -1666,6 +1700,7 @@
 }
 
 body,
+.navbar,
 .studio-header,
 .projects,
 .project-card,
