@@ -1,78 +1,35 @@
 # VisionArch
 
-Floor plan to 3D-style architectural visualization, with a community to share and discuss designs.
+### Introduction
 
-VisionArch transforms a 2D floor plan - uploaded as an image or sketched directly in-app - into a polished top-down 3D-style render. Compare before/after, try different interior styles, save your work, and share it with the community to get votes and feedback.
+VisionArch is an AI powered architectural visualization Saas that is built using React, Typescript, and Puter. I used AI models like Gemini to help me transform the 2D floor plans into 3D floor plans that renders with a permanent hosting and persistent metadata.
 
 Repo: github.com/Yossifraslan/VisionArch
 
 Live demo: vision-arch-two.vercel.app
 
-Puter: https://puter.com/
-open this link, and create an account from puter.com itself then open my website and click `login` and you should be in. 
-because the sign in page is from puter. Also I had some friends to test it out and they were able to login through Phone number verification. 
+### Tech Stack
 
-and in the project itself, next to start building there is a `watch demo` video. Watch it to see the project.
-
-<video controls src="public/demo.mp4" title="Demo video"></video>
----
-
-## Credits
-
-This project was built on top of the excellent Roomify tutorial by Adrian Hajdin (JS Mastery), which covers the core upload -> AI render -> compare flow using Puter.js. Huge thanks to Adrian for the foundation.
-
-Everything beyond that base - the drawing canvas, templates, community feed, voting, threaded comments, project sharing, renaming, and the visual redesign - was built independently on top of it.
-
-The drawing canvas is powered by tldraw, an open-source (MIT licensed) infinite canvas SDK.
-
----
-
-## Features
-
-### Core
-
-- Upload a floor plan image and generate a polished, top-down 3D-style render locally in the browser
-- Draw your own floor plan from scratch on a full freehand canvas (powered by tldraw) - sketch shapes, rooms, and labels, then generate a render directly from your drawing
-- Floor plan templates - load a pre-made starter layout (Studio, 1-Bedroom, 2-Bedroom, Open Loft, Family Home) onto the canvas instead of starting blank
-- Before/after comparison slider to see the original plan next to the rendered visualization
-- Style selector - regenerate the same floor plan in Modern, Minimalist, Industrial, or Luxury styles, without losing the strict floor plan geometry
-- Export your render as a downloadable image
-
-### Projects
-
-- Save, rename, and delete projects
-- Projects persist privately to your account via Puter's key-value storage
-
-### Community
-
-- Share / unshare any project - moves it from your private storage into a public community feed, with your username and a timestamp attached
-- Browse community designs on a dedicated /community page, visible to everyone (including logged-out visitors)
-- Upvote / downvote designs (Reddit-style net score)
-- Threaded comments - reply to comments, delete your own
-- Logged-out visitors can browse freely; voting or commenting prompts a one-click sign-in
-
-### Polish
-
-- Custom amber/teal visual identity with ambient animated background
-- Animated route-transition loader
-- Custom confirmation modals (no native browser popups)
-
----
-
-## Tech Stack
-
-- React Router v7 (framework mode, SSR)
+- React
 - TypeScript
 - Tailwind CSS v4
-- Puter.js - authentication, key-value storage, and a custom Puter Worker (serverless backend) for all project/vote/comment APIs
-- tldraw - drawing canvas SDK
-- react-compare-slider - before/after image comparison
-- lucide-react - icons
-- Vercel - hosting / deployment
+- Puter.js: authentication, key-value storage, and a custom Puter Worker (serverless backend) for all project/vote/comment APIs
+- tldraw: drawing canvas SDK
+- react-compare-slider: before/after image comparison
+- lucide-react: icons
+- Vercel: hosting / deployment
 
----
+### Features
 
-## How It Works
+- _Core Features_: You can upload a floor plan image and it will generate a 3D style floor plan or you can draw your own floor plan from scratch under /draw for a full freehand canvas that is powered by tldraw, but I added a prebuilt ones under templates to help you build faster. After you generate, you can see the before and after comparison of the 2D and 3D floor plan. If you don't like the theme, you can change it into a different style and changing it to Modern, Minimalist, Industrial, or Luxury style then click regenerate. Then you can export it into a downloadable image.
+
+- _Projects_: You can save, rename, and delete your projects. The projects persist privately to your own account by Puter's key-value storage.
+
+- _Community_: Community is a page where people share their 3D designed space/room and other people can vote whether they like it or hate it and write a comment about it.
+
+- _Polish_: Custom amber or teal visual identity with an ambient animated background, animated the route transition loading and a custom confirmation modals.
+
+### How It Works
 
 1. Sign in with Puter (one-click, no separate account needed)
 
@@ -82,52 +39,8 @@ The drawing canvas is powered by tldraw, an open-source (MIT licensed) infinite 
 
 3. VisionArch processes the image locally into a styled, architectural visualization that keeps the floor-plan structure readable while enhancing the presentation
 
-4. Compare the original plan against the 3D-style render with a drag slider
+4. Compare the original plan against the 3D style render with a drag slider
 
 5. Try different interior styles, export the result, rename the project, or share it to the community feed
 
 6. On /community, anyone can browse, vote, and leave threaded comments on shared designs
-
----
-
-## Architecture Notes
-
-- Private projects live in each user's own Puter key-value storage namespace
-- Sharing moves a project from private storage into a shared public namespace (accessible via the Puter Worker, using me.puter.kv), attaching the owner's username and a share timestamp
-- Unsharing reverses this - pulls it back into the user's private storage and removes it from the public feed
-- All project, vote, comment, and rename logic is handled by a custom-deployed Puter Worker acting as a lightweight serverless API, rather than a traditional backend server
-- Public, read-only endpoints (community list, comments) use plain fetch() rather than puter.workers.exec(), since the latter requires an authenticated Puter session - this was a deliberate fix to make sure logged-out visitors can browse the community without being signed in
-
----
-
-## Setup (Local Development)
-
-```bash
-git clone https://github.com/Yossifraslan/VisionArch.git
-
-cd VisionArch
-
-npm install
-```
-
-Create a `.env` file in the project root:
-
-```env
-VITEPUTERWORKERURL=yourputerworkerurl_here
-```
-
-You'll need to deploy your own Puter Worker (the backend API for projects, voting, and comments) via puter.com and put its URL above.
-
-Run the dev server:
-
-```bash
-npm run dev
-```
-
----
-
-## Future Ideas
-
-- Real-time presence (see who else is viewing a project live)
-- More interior styles, and finer style differentiation
-- Image-based templates in addition to the current shape-based ones
