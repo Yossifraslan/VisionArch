@@ -52,18 +52,17 @@ export const createProject = async ({
 
   const resolvedSource =
     hostedSource?.url ||
+    item.sourceImage ||
     (isHostedUrl(item.sourceImage) ? item.sourceImage : "");
 
   if (!resolvedSource) {
-    console.warn("Failed to host source image, skipping save.");
+    console.warn("No usable source image available; skipping save.");
     return null;
   }
 
   const resolvedRender = hostedRender?.url
-    ? hostedRender?.url
-    : item.renderedImage && isHostedUrl(item.renderedImage)
-      ? item.renderedImage
-      : undefined;
+    ? hostedRender.url
+    : item.renderedImage || undefined;
 
   const {
     sourcePath: _sourcePath,

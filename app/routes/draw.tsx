@@ -1,9 +1,4 @@
-import {
-  Tldraw,
-  useEditor,
-  createShapeId,
-  renderRichTextFromHTML,
-} from "tldraw";
+import { Tldraw, useEditor, createShapeId, toRichText } from "tldraw";
 import "tldraw/tldraw.css";
 import { useEffect, useState } from "react";
 import { useNavigate, Link, useOutletContext } from "react-router";
@@ -79,7 +74,7 @@ const TemplatesMenu = () => {
         h: shape.h,
         color: "black" as const,
         fill: "none" as const,
-        richText: renderRichTextFromHTML(editor, shape.label),
+        richText: toRichText(shape.label),
       },
     }));
 

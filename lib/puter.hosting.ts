@@ -68,7 +68,16 @@ export const uploadImageToHosting = async ({
 
     return hostedUrl ? { url: hostedUrl } : null;
   } catch (e) {
-    console.warn(`Failed to store hosted image: ${e}`);
+    const message = e instanceof Error ? e.message : String(e);
+    const isStorageLimit =
+      /413|Storage limit reached|quota|storage/i.test(message);
+
+    if (isStorageLimit) {
+      console.warn("Puter storage quota reached; continuing without hosted image copy.");
+    } else {
+      console.warn(`Failed to store hosted image: ${message}`);
+    }
+
     return null;
   }
 };
