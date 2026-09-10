@@ -128,14 +128,6 @@ export default function Home() {
       <Navbar />
 
       <section className="hero">
-        <div className="announce">
-          <div className="dot">
-            <div className="pulse"></div>
-          </div>
-
-          <p>A practical room-planning tool</p>
-        </div>
-
         <h1>Sketch the room, test the layout, and keep the good ideas.</h1>
 
         <p className="subtitle">
