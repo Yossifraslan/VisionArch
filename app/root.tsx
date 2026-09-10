@@ -78,9 +78,7 @@ export default function App() {
 
   const refreshAuth = async () => {
     try {
-      // isSignedIn() is a local, synchronous check — it never triggers
-      // Puter's consent/sign-in popup. Only call getCurrentUser() if
-      // there is already a session to confirm.
+      
       if (!puter.auth.isSignedIn()) {
         setAuthState(DEFAULT_AUTH_STATE);
         return false;
@@ -101,11 +99,7 @@ export default function App() {
     }
   };
 
-  /*
-   * Load the saved theme when the app starts.
-   * If there is no saved preference, use the computer's
-   * preferred colour scheme.
-   */
+  
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
 
@@ -114,14 +108,11 @@ export default function App() {
     } else if (savedTheme === "light") {
       setIsDark(false);
     } else {
-      setIsDark(window.matchMedia("(prefers-color-scheme: dark)").matches);
+      setIsDark(false);
     }
   }, []);
 
-  /*
-   * Apply the dark class to <html> whenever isDark changes.
-   * This is what activates the .dark styles in app.css.
-   */
+  
   useEffect(() => {
     document.documentElement.classList.toggle("dark", isDark);
 
