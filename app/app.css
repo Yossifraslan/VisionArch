@@ -8,7 +8,7 @@
   --color-primary: #176b62;
   --color-secondary: #d29b2e;
   --color-accent: #c75b48;
-  --font-serif: "DM Serif Display", Georgia, serif;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-sans: "DM Sans", sans-serif;
   --shadow-card: 0 4px 14px rgba(32, 35, 33, 0.12);
 }
@@ -711,7 +711,13 @@
     }
 
     h1 {
-      @apply relative z-10 text-6xl md:text-8xl font-serif leading-[0.95] text-black mb-8 max-w-5xl mx-auto;
+      @apply relative z-10 text-black mb-8 mx-auto;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 600;
+      font-size: clamp(3.25rem, 7vw, 8rem);
+      line-height: 0.82;
+      letter-spacing: -0.04em;
+      
     }
 
     .subtitle {
