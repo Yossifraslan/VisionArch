@@ -15,66 +15,65 @@ export default function About() {
       <main className="max-w-7xl mx-auto px-6 mt-12">
         <section className="hero">
           <div className="announce">
-            <p>Introducing VisionArch</p>
+            <p>A more thoughtful way to plan rooms</p>
           </div>
 
           <h1 className="text-5xl md:text-7xl font-serif leading-tight text-black mb-6">
-            Build and iterate on spaces at the speed of thought
+            Sketch room ideas without losing the original plan.
           </h1>
 
           <p className="subtitle mb-8">
-            VisionArch blends fast visual feedback and familiar web workflows
-            with generative tooling so designers can move from idea to image
-            faster.
+            VisionArch is built for the in-between part of design: rough layouts,
+            room references, and little visual experiments before the final
+            answer becomes obvious.
           </p>
 
           <div className="flex gap-4 justify-center mb-12">
             <Link to="/draw" className="btn btn--primary btn--md">
-              Start Building
+              Start Planning
             </Link>
           </div>
         </section>
 
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           <article className="card p-8">
-            <h2 className="text-xl font-serif mb-3">My approach</h2>
+            <h2 className="text-xl font-serif mb-3">The idea</h2>
             <p className="text-sm text-zinc-600">
-              I build small, focused tools that slot into existing workflows.
-              VisionArch accelerates concepting and early-stage visualization
-              without replacing your main design software.
+              I wanted a small tool that feels like a real design notebook: fast,
+              tactile, and easy to keep using when you are thinking through a
+              room in the middle of the day.
             </p>
           </article>
 
           <article className="card p-8">
-            <h2 className="text-xl font-serif mb-3">Design principles</h2>
+            <h2 className="text-xl font-serif mb-3">What matters</h2>
             <ul className="text-sm text-zinc-600 space-y-2">
               <li>
-                <strong>Speed:</strong> fast feedback and fluid iteration.
+                <strong>Clarity:</strong> room studies that stay readable.
               </li>
               <li>
-                <strong>Clarity:</strong> predictable controls and sensible
-                defaults.
+                <strong>Speed:</strong> ideas captured before they disappear.
               </li>
               <li>
-                <strong>Respect:</strong> keep your creative ownership and data
-                in your control.
+                <strong>Ownership:</strong> your projects stay in your own flow.
               </li>
             </ul>
           </article>
         </section>
 
         <article className="card p-8 max-w-4xl mx-auto mb-12">
-          <h2 className="text-xl font-serif mb-3">About the author</h2>
+          <h2 className="text-xl font-serif mb-3">Why it exists</h2>
           <p className="text-sm text-zinc-600">
-            I'm a product designer and engineer who focuses on building
-            delightful, practical tools. I ship early, learn quickly from
-            users, and iterate based on real-world feedback.
+            Room planning is a personal process. You move between quick sketch,
+            practical layout, and mood check in a single afternoon. VisionArch is
+            meant to support that rhythm without turning the whole thing into a
+            giant, overbuilt platform.
           </p>
 
           <h3 className="text-lg font-serif mt-6 mb-2">Thanks for trying VisionArch</h3>
           <p className="text-sm text-zinc-600">
-            Feedback helps - if you run into anything odd or have ideas, I pay
-            attention and iterate fast.
+            If something feels awkward or unclear, that is useful feedback. I want
+            the tool to feel honest, useful, and easy to keep using.
           </p>
         </article>
       </main>

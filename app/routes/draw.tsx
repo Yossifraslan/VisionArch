@@ -42,9 +42,8 @@ const DrawHint = () => {
   return (
     <div className="draw-hint">
       <p>
-        <strong>Sketch your rooms</strong>, then hit{" "}
-        <strong>Generate 3D Render</strong> to bring it to life. Or load a
-        template to get started fast.
+        <strong>Sketch the room</strong>, then turn it into a cleaner concept.
+        Start from a template or keep building by hand.
       </p>
       <button onClick={dismiss}>
         <X size={16} />
@@ -240,7 +239,7 @@ const DrawCanvas = () => {
           disabled={isGenerating}
         >
           <Sparkles size={16} />
-          {isGenerating ? "Generating..." : "Generate 3D Render"}
+          {isGenerating ? "Generating..." : "Create room concept"}
         </button>
       </div>
 

@@ -305,7 +305,7 @@ const VisualizerId = () => {
 
           <div className={`render-area ${isProcessing ? "is-processing" : ""}`}>
             {currentImage ? (
-              <img src={currentImage} alt="AI Render" className="render-img" />
+              <img src={currentImage} alt="Room concept" className="render-img" />
             ) : (
               <div className="render-placeholder">
                 {project?.sourceImage && (
@@ -324,7 +324,7 @@ const VisualizerId = () => {
                   <RefreshCcw className="spinner" />
                   <span className="title">Rendering...</span>
                   <span className="subtitle">
-                    Generating your 3D visualization
+                    Building a fresh room concept
                   </span>
                 </div>
               </div>

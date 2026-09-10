@@ -133,14 +133,14 @@ export default function Home() {
             <div className="pulse"></div>
           </div>
 
-          <p>Introducing VisionArch</p>
+          <p>A practical room-planning tool</p>
         </div>
 
-        <h1>Build beautiful spaces at the speed of thought with VisionArch</h1>
+        <h1>Sketch the room, test the layout, and keep the good ideas.</h1>
 
         <p className="subtitle">
-          VisionArch is an AI-first design environment that helps you visualize,
-          render, and ship architectural projects faster than ever.
+          VisionArch is a place for exploring room ideas, comparing layouts, and
+          saving the versions you actually want to keep.
         </p>
 
         <div className="actions">
