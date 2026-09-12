@@ -36,7 +36,7 @@ export const links: Route.LinksFunction = () => [
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=DM+Sans:wght@400;500;600;700&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=Faculty+Glyphic&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playwrite+GB+J:ital,wght@0,100..400;1,100..400&family=Potta+One&display=swap",
   },
 ];
 
