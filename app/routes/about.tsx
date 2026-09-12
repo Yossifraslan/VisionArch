@@ -9,45 +9,44 @@ export function meta({}: Route.MetaArgs) {
 
 export default function About() {
   return (
-    <div className="pt-20 pb-16 bg-background text-foreground min-h-screen">
+    <div className="about-page">
       <Navbar />
 
-      <main className="max-w-7xl mx-auto px-6 mt-12">
-        <section className="hero">
-          <div className="announce">
+      <main className="about-shell">
+        <section className="about-hero">
+          <div className="about-eyebrow">
+            <span className="dot" />
             <p>A more thoughtful way to plan rooms</p>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-serif leading-tight text-black mb-6">
-            Sketch room ideas without losing the original plan.
-          </h1>
+          <h1>Sketch room ideas without losing the original plan.</h1>
 
-          <p className="subtitle mb-8">
+          <p className="subtitle">
             VisionArch is built for the in-between part of design: rough layouts,
             room references, and little visual experiments before the final
             answer becomes obvious.
           </p>
 
-          <div className="flex gap-4 justify-center mb-12">
+          <div className="about-actions">
             <Link to="/draw" className="btn btn--primary btn--md">
               Start Planning
             </Link>
           </div>
         </section>
 
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          <article className="card p-8">
-            <h2 className="text-xl font-serif mb-3">The idea</h2>
-            <p className="text-sm text-zinc-600">
+        <section className="about-grid">
+          <article className="about-card">
+            <h2>The idea</h2>
+            <p>
               I wanted a small tool that feels like a real design notebook: fast,
               tactile, and easy to keep using when you are thinking through a
               room in the middle of the day.
             </p>
           </article>
 
-          <article className="card p-8">
-            <h2 className="text-xl font-serif mb-3">What matters</h2>
-            <ul className="text-sm text-zinc-600 space-y-2">
+          <article className="about-card">
+            <h2>What matters</h2>
+            <ul>
               <li>
                 <strong>Clarity:</strong> room studies that stay readable.
               </li>
@@ -61,17 +60,17 @@ export default function About() {
           </article>
         </section>
 
-        <article className="card p-8 max-w-4xl mx-auto mb-12">
-          <h2 className="text-xl font-serif mb-3">Why it exists</h2>
-          <p className="text-sm text-zinc-600">
+        <article className="about-card about-feature">
+          <h2>Why it exists</h2>
+          <p>
             Room planning is a personal process. You move between quick sketch,
             practical layout, and mood check in a single afternoon. VisionArch is
             meant to support that rhythm without turning the whole thing into a
             giant, overbuilt platform.
           </p>
 
-          <h3 className="text-lg font-serif mt-6 mb-2">Thanks for trying VisionArch</h3>
-          <p className="text-sm text-zinc-600">
+          <h3>Thanks for trying VisionArch</h3>
+          <p>
             If something feels awkward or unclear, that is useful feedback. I want
             the tool to feel honest, useful, and easy to keep using.
           </p>
