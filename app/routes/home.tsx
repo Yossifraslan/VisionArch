@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import Button from "../../componens/ui/Button";
 import Upload from "../../componens/Upload";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import {
   createProject,
@@ -128,42 +128,50 @@ export default function Home() {
       <Navbar />
 
       <section className="hero">
-        <h1>Sketch the room, test the layout, and keep the good ideas.</h1>
+        <div className="hero-copy">
+          <h1 className="hero-title">
+            <span>Sketch the room, </span>
+            <span>test the layout, and </span>
+            <span>keep the good ideas.</span>
+          </h1>
 
-        <p className="subtitle">
-          VisionArch is a place for exploring room ideas, comparing layouts, and
-          saving the versions you actually want to keep.
-        </p>
+          <p className="subtitle">
+            VisionArch is a place for exploring room ideas, comparing layouts,
+            and saving the versions you actually want to keep.
+          </p>
 
-        <div className="actions">
-          <a href="#upload" className="cta">
-            Start Building <ArrowRight className="icon" />
-          </a>
+          <div className="actions">
+            <Link to="/draw" className="cta">
+              Start Building <ArrowRight className="icon" />
+            </Link>
 
-          <Button
-            variant="outline"
-            size="lg"
-            className="demo"
-            onClick={() => setIsDemoOpen(true)}
-          >
-            Watch Demo
-          </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              className="demo"
+              onClick={() => setIsDemoOpen(true)}
+            >
+              Watch Demo
+            </Button>
+          </div>
         </div>
 
-        <div id="upload" className="upload-shell">
-          <div className="grid-overlay" />
+        <div className="hero-visual">
+          <div id="upload" className="upload-shell">
+            <div className="grid-overlay" />
 
-          <div className="upload-card">
-            <div className="upload-head">
-              <div className="upload-icon">
-                <Layers className="icon" />
+            <div className="upload-card">
+              <div className="upload-head">
+                <div className="upload-icon">
+                  <Layers className="icon" />
+                </div>
+
+                <h3>Upload your floor plan</h3>
+                <p>Supports JPG, PNG, formats up to 10MB</p>
               </div>
 
-              <h3>Upload your floor plan</h3>
-              <p>Supports JPG, PNG, formats up to 10MB</p>
+              <Upload onComplete={handleUploadComplete} />
             </div>
-
-            <Upload onComplete={handleUploadComplete} />
           </div>
         </div>
       </section>
