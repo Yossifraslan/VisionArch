@@ -44,3 +44,7 @@ Live demo: vision-arch-two.vercel.app
 5. Try different interior styles, export the result, rename the project, or share it to the community feed
 
 6. On /community, anyone can browse, vote, and leave threaded comments on shared designs
+
+
+### If something doesn't work
+- Please refresh your page because everything has been tested and works well, so it could be a problem in your end. Thank you!
