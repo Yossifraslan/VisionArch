@@ -14,8 +14,6 @@ export default function About() {
 
       <main className="about-shell">
         <section className="about-hero">
-          <div className="about-eyebrow"></div>
-
           <h1>Sketch room ideas without losing the original plan.</h1>
 
           <p className="subtitle">
