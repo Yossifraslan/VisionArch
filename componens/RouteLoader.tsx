@@ -12,7 +12,6 @@ const RouteLoader = ({ isActive }: { isActive: boolean }) => {
   const isInitialRef = useRef(true);
 
   useEffect(() => {
-    // Initial mount — always show the loader once, covers full page reloads.
     const openTimer = setTimeout(() => setPhase("opening"), 700);
     const revealTimer = setTimeout(() => setPhase("revealed"), 1000);
     const closeTimer = setTimeout(() => {
@@ -61,7 +60,11 @@ const RouteLoader = ({ isActive }: { isActive: boolean }) => {
   if (!shouldRender) return null;
 
   return (
-    <div className={`route-loader ${phase === "closing" ? "is-closing" : ""}`}>
+    <div
+      className={`route-loader ${phase === "closing" ? "is-closing" : ""}`}
+      style={{ pointerEvents: "none", userSelect: "none" }}
+      aria-hidden="true"
+    >
       <div className="route-loader-inner">
         <svg
           className={`route-loader-svg phase-${phase}`}
