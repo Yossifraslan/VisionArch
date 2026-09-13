@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import Button from "../../componens/ui/Button";
 import Upload from "../../componens/Upload";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useOutletContext } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import {
   createProject,
@@ -35,6 +35,7 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Home() {
   const navigate = useNavigate();
+  const { isSignedIn, signIn } = useOutletContext<AuthContext>();
   const [projects, setProjects] = useState<DesignItem[]>([]);
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
   const [isDemoOpen, setIsDemoOpen] = useState(false);
@@ -95,7 +96,22 @@ export default function Home() {
 
   const cancelDelete = () => setDeleteTargetId(null);
 
+  const handleStartBuilding = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!isSignedIn) {
+      e.preventDefault();
+      void signIn();
+      return;
+    }
+
+    navigate("/draw");
+  };
+
   useEffect(() => {
+    if (!isSignedIn) {
+      setProjects([]);
+      return;
+    }
+
     const fetchProjects = async () => {
       await pingWorker();
 
@@ -121,7 +137,7 @@ export default function Home() {
     };
 
     fetchProjects();
-  }, []);
+  }, [isSignedIn]);
 
   return (
     <div className="home">
@@ -141,7 +157,7 @@ export default function Home() {
           </p>
 
           <div className="actions">
-            <Link to="/draw" className="cta">
+            <Link to="/draw" className="cta" onClick={handleStartBuilding}>
               Start Building <ArrowRight className="icon" />
             </Link>
 
