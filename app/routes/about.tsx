@@ -14,17 +14,14 @@ export default function About() {
 
       <main className="about-shell">
         <section className="about-hero">
-          <div className="about-eyebrow">
-            <span className="dot" />
-            <p>A more thoughtful way to plan rooms</p>
-          </div>
+          <div className="about-eyebrow"></div>
 
           <h1>Sketch room ideas without losing the original plan.</h1>
 
           <p className="subtitle">
-            VisionArch is built for the in-between part of design: rough layouts,
-            room references, and little visual experiments before the final
-            answer becomes obvious.
+            VisionArch is built for the in-between part of design: rough
+            layouts, room references, and little visual experiments before the
+            final answer becomes obvious.
           </p>
 
           <div className="about-actions">
@@ -38,9 +35,9 @@ export default function About() {
           <article className="about-card">
             <h2>The idea</h2>
             <p>
-              I wanted a small tool that feels like a real design notebook: fast,
-              tactile, and easy to keep using when you are thinking through a
-              room in the middle of the day.
+              I wanted a small tool that feels like a real design notebook:
+              fast, tactile, and easy to keep using when you are thinking
+              through a room in the middle of the day.
             </p>
           </article>
 
@@ -64,15 +61,15 @@ export default function About() {
           <h2>Why it exists</h2>
           <p>
             Room planning is a personal process. You move between quick sketch,
-            practical layout, and mood check in a single afternoon. VisionArch is
-            meant to support that rhythm without turning the whole thing into a
-            giant, overbuilt platform.
+            practical layout, and mood check in a single afternoon. VisionArch
+            is meant to support that rhythm without turning the whole thing into
+            a giant, overbuilt platform.
           </p>
 
           <h3>Thanks for trying VisionArch</h3>
           <p>
-            If something feels awkward or unclear, that is useful feedback. I want
-            the tool to feel honest, useful, and easy to keep using.
+            If something feels awkward or unclear, that is useful feedback. I
+            want the tool to feel honest, useful, and easy to keep using.
           </p>
         </article>
       </main>
