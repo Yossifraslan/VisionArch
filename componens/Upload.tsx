@@ -17,8 +17,9 @@ const Upload = ({ onComplete }: UploadProps) => {
     const [progress, setProgress] = useState(0);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
-    const { isSignedIn } = useOutletContext<AuthContext>();
+    const { isSignedIn, signIn } = useOutletContext<AuthContext>();
 
     useEffect(() => {
         return () => {
@@ -100,6 +101,16 @@ const Upload = ({ onComplete }: UploadProps) => {
         }
     };
 
+    const handleClick = async (e?: React.SyntheticEvent) => {
+        if (!isSignedIn) {
+            e?.preventDefault();
+            await signIn();
+            return;
+        }
+
+        inputRef.current?.click();
+    };
+
     return (
         <div className="upload">
             {!file ? (
@@ -108,12 +119,27 @@ const Upload = ({ onComplete }: UploadProps) => {
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
+                    onClick={handleClick}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            void handleClick();
+                        }
+                    }}
                 >
                     <input
+                        ref={inputRef}
                         type="file"
                         className="drop-input"
                         accept=".jpg,.jpeg,.png,.webp"
-                        disabled={!isSignedIn}
+                        onClick={(e) => {
+                            if (!isSignedIn) {
+                                e.preventDefault();
+                                void handleClick(e);
+                            }
+                        }}
                         onChange={handleChange}
                     />
 
