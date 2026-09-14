@@ -124,8 +124,23 @@ export default function App() {
   }, []);
 
   const signIn = async () => {
-    await puterSignIn();
-    return await refreshAuth();
+    try {
+      await puterSignIn();
+      return await refreshAuth();
+    } catch (error) {
+      const code =
+        typeof error === "object" && error && "code" in error
+          ? String((error as { code?: string }).code)
+          : "";
+
+      if (code === "popup_blocked" || /popup|blocked/i.test(String(error))) {
+        throw new Error(
+          "Login was blocked by the browser. Please try again by clicking the login button.",
+        );
+      }
+
+      throw error;
+    }
   };
 
   const signOut = async () => {

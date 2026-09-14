@@ -6,8 +6,24 @@ import {
 import { isHostedUrl } from "./utils";
 import { PUTER_WORKER_URL } from "./constants";
 
-export const signIn = async () =>
-  await puter.auth.signIn({ attempt_temp_user_creation: true });
+export const signIn = async () => {
+  try {
+    return await puter.auth.signIn({ attempt_temp_user_creation: true });
+  } catch (error) {
+    const code =
+      typeof error === "object" && error && "code" in error
+        ? String((error as { code?: string }).code)
+        : "";
+
+    if (code === "popup_blocked" || /popup|blocked/i.test(String(error))) {
+      console.warn(
+        "Puter sign-in was blocked by the browser. Make sure it starts from a direct user click.",
+      );
+    }
+
+    throw error;
+  }
+};
 
 export const signOut = () => puter.auth.signOut();
 
