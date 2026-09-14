@@ -839,11 +839,11 @@
       }
 
       h1 {
-        @apply mt-6 text-5xl md:text-7xl font-serif text-black leading-[0.8];
+        @apply mt-6 text-5xl md:text-7xl font-serif text-foreground leading-[0.8];
       }
 
       .subtitle {
-        @apply mt-6 max-w-2xl text-base leading-relaxed text-zinc-600;
+        @apply mt-6 max-w-2xl text-base leading-relaxed text-zinc-600 dark:text-zinc-300;
       }
     }
 
@@ -856,15 +856,15 @@
     }
 
     .about-card {
-      @apply rounded-[1.4rem] border border-black/10 bg-white/60 p-8 shadow-[0_12px_24px_rgba(17,17,17,0.04)];
+      @apply rounded-[1.4rem] border border-black/10 bg-white/60 dark:bg-surface/80 p-8 shadow-[0_12px_24px_rgba(17,17,17,0.04)];
 
       h2 {
-        @apply mb-3 text-2xl font-serif text-black;
+        @apply mb-3 text-2xl font-serif text-foreground;
       }
 
       p,
       li {
-        @apply text-base leading-relaxed text-zinc-600;
+        @apply text-base leading-relaxed text-zinc-600 dark:text-zinc-300;
       }
 
       ul {
@@ -876,7 +876,7 @@
       @apply mt-8 max-w-4xl;
 
       h3 {
-        @apply mt-8 mb-2 text-2xl font-serif text-black;
+        @apply mt-8 mb-2 text-2xl font-serif text-foreground;
       }
     }
   }
