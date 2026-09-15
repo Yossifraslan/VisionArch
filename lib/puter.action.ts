@@ -6,10 +6,8 @@ import {
 import { isHostedUrl } from "./utils";
 import { PUTER_WORKER_URL } from "./constants";
 
-export const signIn = async () => {
-  try {
-    return await puter.auth.signIn({ attempt_temp_user_creation: true });
-  } catch (error) {
+export const signIn = () => {
+  const handleSignInError = (error: unknown) => {
     const code =
       typeof error === "object" && error && "code" in error
         ? String((error as { code?: string }).code)
@@ -22,6 +20,13 @@ export const signIn = async () => {
     }
 
     throw error;
+  };
+
+  try {
+    const signInRequest = puter.auth.signIn({ attempt_temp_user_creation: true });
+    return signInRequest.catch(handleSignInError);
+  } catch (error) {
+    throw handleSignInError(error);
   }
 };
 

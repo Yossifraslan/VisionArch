@@ -7,21 +7,17 @@ const Navbar = () => {
   const { isSignedIn, userName, signIn, signOut, isDark, toggleDark } =
     useOutletContext<AuthContext>();
 
-  const handleAuthClick = async () => {
+  const handleAuthClick = () => {
     if (isSignedIn) {
-      try {
-        await signOut();
-      } catch (e) {
+      void signOut().catch((e) => {
         console.error(`Puter sign out failed: ${e}`);
-      }
+      });
       return;
     }
 
-    try {
-      await signIn();
-    } catch (e) {
+    void signIn().catch((e) => {
       console.error(`Puter sign in failed: ${e}`);
-    }
+    });
   };
 
   return (

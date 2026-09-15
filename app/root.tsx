@@ -123,23 +123,29 @@ export default function App() {
     refreshAuth();
   }, []);
 
-  const signIn = async () => {
-    try {
-      await puterSignIn();
-      return await refreshAuth();
-    } catch (error) {
+  const signIn = () => {
+    const handleSignInError = (error: unknown) => {
       const code =
         typeof error === "object" && error && "code" in error
           ? String((error as { code?: string }).code)
           : "";
 
       if (code === "popup_blocked" || /popup|blocked/i.test(String(error))) {
-        throw new Error(
+        return new Error(
           "Login was blocked by the browser. Please try again by clicking the login button.",
         );
       }
 
-      throw error;
+      return error;
+    };
+
+    try {
+      const signInPromise = puterSignIn();
+      return signInPromise.then(refreshAuth).catch((error) => {
+        throw handleSignInError(error);
+      });
+    } catch (error) {
+      throw handleSignInError(error);
     }
   };
 

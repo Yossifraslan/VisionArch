@@ -104,28 +104,28 @@ export default function Community() {
     init();
   }, [isSignedIn]);
 
-  const handleVote = async (projectId: string, direction: 1 | -1) => {
+  const handleVote = (projectId: string, direction: 1 | -1) => {
     if (!isSignedIn) {
-      try {
-        await signIn();
-      } catch (e) {
+      void signIn().catch((e) => {
         console.error("Sign in failed or was cancelled:", e);
-      }
+      });
       return;
     }
 
-    const currentVote = userVotes[projectId] || 0;
-    const newDirection = currentVote === direction ? 0 : direction;
+    void (async () => {
+      const currentVote = userVotes[projectId] || 0;
+      const newDirection = currentVote === direction ? 0 : direction;
 
-    const result = await voteOnProject(projectId, newDirection);
-    if (!result) return;
+      const result = await voteOnProject(projectId, newDirection);
+      if (!result) return;
 
-    setUserVotes((prev) => ({ ...prev, [projectId]: newDirection }));
-    setProjects((prev) =>
-      prev
-        .map((p) => (p.id === projectId ? { ...p, score: result.score } : p))
-        .sort((a, b) => (b.score || 0) - (a.score || 0)),
-    );
+      setUserVotes((prev) => ({ ...prev, [projectId]: newDirection }));
+      setProjects((prev) =>
+        prev
+          .map((p) => (p.id === projectId ? { ...p, score: result.score } : p))
+          .sort((a, b) => (b.score || 0) - (a.score || 0)),
+      );
+    })();
   };
 
   const openComments = async (projectId: string) => {
@@ -149,37 +149,37 @@ export default function Community() {
     setReplyTo(null);
   };
 
-  const handleSubmitComment = async () => {
+  const handleSubmitComment = () => {
     if (!isSignedIn) {
-      try {
-        await signIn();
-      } catch (e) {
+      void signIn().catch((e) => {
         console.error("Sign in failed or was cancelled:", e);
-      }
+      });
       return;
     }
 
-    if (!activeProjectId || !commentText.trim()) return;
+    void (async () => {
+      if (!activeProjectId || !commentText.trim()) return;
 
-    const comment = await addComment({
-      projectId: activeProjectId,
-      text: commentText,
-      parentId: replyTo,
-    });
+      const comment = await addComment({
+        projectId: activeProjectId,
+        text: commentText,
+        parentId: replyTo,
+      });
 
-    if (comment) {
-      setComments((prev) => [...prev, comment]);
-      setCommentText("");
-      setReplyTo(null);
+      if (comment) {
+        setComments((prev) => [...prev, comment]);
+        setCommentText("");
+        setReplyTo(null);
 
-      setProjects((prev) =>
-        prev.map((p) =>
-          p.id === activeProjectId
-            ? { ...p, commentCount: (p.commentCount || 0) + 1 }
-            : p,
-        ),
-      );
-    }
+        setProjects((prev) =>
+          prev.map((p) =>
+            p.id === activeProjectId
+              ? { ...p, commentCount: (p.commentCount || 0) + 1 }
+              : p,
+          ),
+        );
+      }
+    })();
   };
 
   const handleDeleteComment = async (commentId: string) => {
@@ -301,7 +301,14 @@ export default function Community() {
 
             <div className="comments-input">
               {!isSignedIn ? (
-                <button className="login-to-comment" onClick={signIn}>
+                <button
+                  className="login-to-comment"
+                  onClick={() =>
+                    void signIn().catch((e) =>
+                      console.error("Sign in failed or was cancelled:", e),
+                    )
+                  }
+                >
                   Log in to join the discussion.
                 </button>
               ) : (

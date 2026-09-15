@@ -101,10 +101,12 @@ const Upload = ({ onComplete }: UploadProps) => {
         }
     };
 
-    const handleClick = async (e?: React.SyntheticEvent) => {
+    const handleClick = (e?: React.SyntheticEvent) => {
         if (!isSignedIn) {
             e?.preventDefault();
-            await signIn();
+            void signIn().catch((error) => {
+                console.error("Puter sign in failed:", error);
+            });
             return;
         }
 
