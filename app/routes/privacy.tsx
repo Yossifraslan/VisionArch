@@ -37,7 +37,10 @@ export default function Privacy() {
                 Back Home
               </Link>
 
-              <a href="#contact" className="btn btn--primary btn--sm">
+              <a
+                href="mailto:raslanyossif@gmail.com?subject=VisionArch%20Support"
+                className="btn btn--primary btn--sm"
+              >
                 Contact
               </a>
             </div>
@@ -103,7 +106,7 @@ export default function Privacy() {
           </h3>
 
           <p className="text-sm text-zinc-600 dark:text-zinc-300 mb-4">
-            Email: hello@visionarch.example (demo)
+            Email: <a href="mailto:raslanyossif@gmail.com?subject=VisionArch%20Support" className="text-primary underline underline-offset-4">raslanyossif@gmail.com</a>
           </p>
         </section>
       </main>
