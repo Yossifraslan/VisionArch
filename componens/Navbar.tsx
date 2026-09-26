@@ -22,17 +22,17 @@ const Navbar = () => {
 
   return (
     <header className="navbar">
-      <nav className="inner">
+      <nav className="inner items-center">
         <div className="left">
           <Link to="/" className="brand">
             <Box className="logo" />
             <span className="name">VisionArch</span>
           </Link>
+        </div>
 
-          <div className="links">
-            {isSignedIn && <Link to="/draw">Draw</Link>}
-            <Link to="/community">Community</Link>
-          </div>
+        <div className="links md:flex md:items-center md:gap-6">
+          {isSignedIn && <Link to="/draw">Draw</Link>}
+          <Link to="/community">Community</Link>
         </div>
 
         <div className="actions">

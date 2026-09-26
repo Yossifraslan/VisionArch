@@ -23,14 +23,14 @@ export default function About() {
           </p>
 
           <div className="about-actions">
-            <Link to="/draw" className="btn btn--primary btn--md">
+            <Link to="/draw" className="btn btn--primary btn--md rounded-lg">
               Start Planning
             </Link>
           </div>
         </section>
 
-        <section className="about-grid">
-          <article className="about-card">
+        <section className="about-grid grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+          <article className="about-card h-full">
             <h2>The idea</h2>
             <p>
               I wanted a small tool that feels like a real design notebook:
@@ -39,7 +39,7 @@ export default function About() {
             </p>
           </article>
 
-          <article className="about-card">
+          <article className="about-card h-full">
             <h2>What matters</h2>
             <ul>
               <li>
