@@ -274,7 +274,7 @@ export default function Home() {
         </button>
       </section>
 
-      <section className="projects">
+      {projects.length > 0 && <section className="projects">
         <div className="section-inner">
           <div className="section-head">
             <div className="copy">
@@ -330,7 +330,7 @@ export default function Home() {
             )}
           </div>
         </div>
-      </section>
+      </section>}
 
       {deleteTargetId && (
         <div className="auth-modal">
