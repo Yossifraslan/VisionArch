@@ -145,31 +145,31 @@ export default function Home() {
       <section className="hero">
         <div className="hero-copy">
           <h1 className="hero-title">
-            <span>Stop guessing your layout. </span>
-            <span>Sketch and test your room ideas in minutes.</span>
+            <span>Let’s make this room </span>
+            <span>feel like yours.</span>
           </h1>
 
           <p className="subtitle">
-            VisionArch gives you a clean digital canvas to drag, drop, and
-            experiment with furniture setups until your room feels just right.
+            Bring a floor plan or a room photo. Try a few ideas, keep what feels
+            right, and come back whenever inspiration strikes.
           </p>
 
           <div className="actions">
             <Link
               to="/draw"
-              className="cta bg-emerald-600 text-white px-6 py-3 rounded-md font-medium hover:bg-emerald-700 transition-colors"
+              className="cta"
               onClick={handleStartBuilding}
             >
-              Start Building <ArrowRight className="icon" />
+              Try an idea <ArrowRight className="icon" />
             </Link>
 
             <Button
               variant="outline"
               size="lg"
-              className="demo border border-zinc-700 text-white bg-zinc-800/50 px-6 py-3 rounded-md font-medium hover:bg-zinc-800 transition-colors"
+              className="demo"
               onClick={() => setIsDemoOpen(true)}
             >
-              Watch Demo
+              See how it works
             </Button>
           </div>
         </div>
@@ -180,7 +180,7 @@ export default function Home() {
 
             <div className="upload-card">
               <div className="upload-head">
-                <h3>Upload your floor plan</h3>
+                <h3>Start with a room photo or floor plan</h3>
               </div>
 
               <Upload onComplete={handleUploadComplete} />

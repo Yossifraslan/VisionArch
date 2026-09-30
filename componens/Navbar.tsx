@@ -32,7 +32,7 @@ const Navbar = () => {
 
         <div className="links md:flex md:items-center md:gap-6">
           {isSignedIn && <Link to="/draw">Draw</Link>}
-          <Link to="/community">Community</Link>
+          <Link to="/community">Ideas from the community</Link>
         </div>
 
         <div className="actions">
@@ -49,21 +49,21 @@ const Navbar = () => {
           {isSignedIn ? (
             <>
               <span className="greeting">
-                {userName ? `Hi, ${userName}` : "Signed in"}
+                {userName ? `Hello, ${userName}` : "Your workspace"}
               </span>
 
               <Button size="sm" onClick={handleAuthClick} className="btn">
-                Log Out
+                Sign out
               </Button>
             </>
           ) : (
             <>
               <Button onClick={handleAuthClick} size="sm" variant="ghost">
-                Log In
+                Sign in
               </Button>
 
               <button className="cta" onClick={handleAuthClick}>
-                Get Started
+                Let’s begin
               </button>
             </>
           )}

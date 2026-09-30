@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="flex items-center space-x-3">
           <span className="text-zinc-900 font-semibold">VisionArch</span>
           <span className="hidden sm:inline">
-            - experiments in composition &amp; tools
+            Room ideas, made a little easier.
           </span>
         </div>
 

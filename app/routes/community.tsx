@@ -207,16 +207,16 @@ export default function Community() {
       <Navbar />
 
       <section className="community-hero">
-        <h1>Community Designs</h1>
-        <p>Browse, vote, and discuss designs shared by everyone.</p>
+        <h1>Rooms, reimagined together</h1>
+        <p>A little inspiration from people making their spaces their own.</p>
       </section>
 
       <section className="community-grid-section">
         {isLoading ? (
-          <p className="loading">Loading community designs...</p>
+          <p className="loading">Gathering room ideas...</p>
         ) : projects.length === 0 ? (
           <div className="empty">
-            No community designs shared yet. Be the first!
+            Nothing shared just yet. Your room idea could be the first.
           </div>
         ) : (
           <div className="community-grid">
@@ -282,7 +282,7 @@ export default function Community() {
                 <p className="loading">Loading comments...</p>
               ) : topLevelComments.length === 0 ? (
                 <p className="empty-comments">
-                  No comments yet. Start the discussion.
+                  No notes yet. Leave the first kind thought.
                 </p>
               ) : (
                 topLevelComments.map((comment) => (

@@ -151,10 +151,10 @@ const Upload = ({ onComplete }: UploadProps) => {
                         </div>
                         <p>
                             {isSignedIn
-                                ? "Click to upload or drag and drop"
-                                : "Sign in or sign up with Puter to upload"}
+                                ? "Choose a room photo or drop it here"
+                                : "Sign in to bring a room photo in"}
                         </p>
-                        <p className="help">JPG, PNG, or WebP. Maximum file size 50 MB.</p>
+                        <p className="help">JPG, PNG, or WebP. Up to 50 MB.</p>
                     </div>
                 </div>
             ) : (
@@ -174,7 +174,7 @@ const Upload = ({ onComplete }: UploadProps) => {
                             <div className="bar" style={{ width: `${progress}%` }} />
 
                             <p className="status-text">
-                                {progress < 100 ? 'Analyzing Floor Plan...' : 'Redirecting...'}
+                                {progress < 100 ? 'Getting your room ready...' : 'Opening your room...'}
                             </p>
                         </div>
                     </div>
