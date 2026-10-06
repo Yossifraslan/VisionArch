@@ -43,6 +43,7 @@ const VisualizerId = () => {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentImage, setCurrentImage] = useState<string | null>(null);
+  const [generationError, setGenerationError] = useState<string | null>(null);
   const [isSharing, setIsSharing] = useState(false);
   const [selectedStyle, setSelectedStyle] = useState<string>("default");
 
@@ -115,6 +116,7 @@ const VisualizerId = () => {
 
     try {
       setIsProcessing(true);
+      setGenerationError(null);
       const result = await generate3DView({
         sourceImage: item.sourceImage,
         style,
@@ -144,9 +146,16 @@ const VisualizerId = () => {
           // saved.renderedImage may be a hosted URL that hasn't fully propagated yet,
           // which previously caused the UI to show a stale image until manual refresh.
         }
+      } else {
+        setGenerationError("The image service returned no result. Try again.");
       }
     } catch (error) {
       console.error("Generation failed: ", error);
+      setGenerationError(
+        error instanceof Error
+          ? error.message
+          : "Could not generate a room concept. Try again.",
+      );
     } finally {
       setIsProcessing(false);
     }
@@ -315,6 +324,12 @@ const VisualizerId = () => {
                     className="render-fallback"
                   />
                 )}
+              </div>
+            )}
+
+            {generationError && (
+              <div className="generation-error" role="alert">
+                {generationError}
               </div>
             )}
 

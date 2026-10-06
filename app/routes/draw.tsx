@@ -201,21 +201,21 @@ const DrawCanvas = () => {
         timestamp: Date.now(),
       };
 
-      const saved = await createProject({
-        item: newItem,
-        visibility: "private",
-      });
-
-      if (!saved) {
-        console.error("Failed to create project from drawing");
-        setIsGenerating(false);
-        return;
+      let imageToGenerate = base64Image;
+      try {
+        const saved = await createProject({
+          item: newItem,
+          visibility: "private",
+        });
+        if (saved?.sourceImage) imageToGenerate = saved.sourceImage;
+      } catch (error) {
+        console.error("Failed to save drawing; continuing with local image:", error);
       }
 
       navigate(`/visualizer/${newId}`, {
         state: {
-          initialImage: saved.sourceImage,
-          initialRendered: saved.renderedImage || null,
+          initialImage: imageToGenerate,
+          initialRendered: null,
           name,
         },
       });
