@@ -2,13 +2,10 @@ import type { Route } from "./+types/home";
 import Navbar from "../../componens/Navbar";
 import Footer from "../../componens/Footer";
 import {
-  ArrowRight,
   ArrowUpRight,
   Clock,
   Trash2,
   AlertTriangle,
-  Play,
-  X,
 } from "lucide-react";
 import Button from "../../componens/ui/Button";
 import Upload from "../../componens/Upload";
@@ -35,10 +32,9 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Home() {
   const navigate = useNavigate();
-  const { isSignedIn, signIn } = useOutletContext<AuthContext>();
+  const { isSignedIn } = useOutletContext<AuthContext>();
   const [projects, setProjects] = useState<DesignItem[]>([]);
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
-  const [isDemoOpen, setIsDemoOpen] = useState(false);
   const isCreatingProjectRef = useRef(false);
 
   const handleUploadComplete = async (base64Image: string) => {
@@ -96,16 +92,6 @@ export default function Home() {
 
   const cancelDelete = () => setDeleteTargetId(null);
 
-  const handleStartBuilding = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!isSignedIn) {
-      e.preventDefault();
-      void signIn();
-      return;
-    }
-
-    navigate("/draw");
-  };
-
   useEffect(() => {
     if (!isSignedIn) {
       setProjects([]);
@@ -143,135 +129,17 @@ export default function Home() {
     <div className="home">
       <Navbar />
 
-      <section className="home-hero">
-        <img
-          className="home-hero-image"
-          src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2400&q=88"
-          alt="Warm modern home set into a quiet desert landscape"
-        />
-        <div className="home-hero-shade" />
-        <div className="home-hero-content">
-          <p className="home-eyebrow">A little room to imagine</p>
-          <h1>
-            Make room
-            <br />
-            for the rest
-            <br />
-            of life.
-          </h1>
-          <p className="home-hero-copy">
-            Your home should feel like you. Start with a sketch, a floor plan,
-            or simply the feeling you want to come home to.
-          </p>
-          <div className="home-hero-actions">
-            <a className="home-explore" href="#room-start">
-              Explore your room <ArrowRight size={16} />
-            </a>
-            <Link to="/draw" onClick={handleStartBuilding} className="home-sketch-link">
-              Start with a sketch
-            </Link>
-          </div>
+      <section className="home-simple">
+        <div className="home-simple-copy">
+          <p className="home-kicker">ROOM PLANNING, MADE SIMPLE</p>
+          <h1>Plan a room</h1>
+          <p>Upload a room photo or start with a quick floor plan sketch.</p>
+          <Link to="/draw" className="home-sketch-link">Start with a sketch</Link>
         </div>
-        <div className="home-hero-aside">
-          <img
-            src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=700&q=82"
-            alt="Sunlit living room with natural textures"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=700&q=82"
-            alt="Quiet contemporary interior with a garden view"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=700&q=82"
-            alt="Modern home nestled into a natural landscape"
-          />
-          <span>Spaces to come back to</span>
-        </div>
-        <p className="home-hero-note">Room to think. Space to make it yours.</p>
-      </section>
-
-      <section className="home-intro">
-        <p className="home-section-label">A more personal way to plan</p>
-        <div className="home-intro-copy">
-          <h2>Every home begins with a feeling.</h2>
-          <p>
-            The chair you inherited. The light at four in the afternoon. The
-            corner that never quite works. Roomify helps you try things out
-            before you move a single thing.
-          </p>
-        </div>
-        <div className="home-intro-aside">
-          <span>Start anywhere</span>
-          <span>Change your mind</span>
-          <span>Make it yours</span>
-        </div>
-      </section>
-
-      <section className="home-inspiration" aria-labelledby="inspiration-title">
-        <div className="home-section-heading">
-          <div>
-            <p className="home-section-label">A few places to begin</p>
-            <h2 id="inspiration-title">Find your kind of room.</h2>
-          </div>
-          <span>01 / 03</span>
-        </div>
-        <div className="inspiration-grid">
-          <article className="inspiration-item">
-            <img
-              src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1000&q=85"
-              alt="A warm living room with timber details and a soft afternoon glow"
-            />
-            <div><h3>Slow mornings</h3><p>Natural light, warm wood, nowhere to rush.</p></div>
-          </article>
-          <article className="inspiration-item inspiration-item-tall">
-            <img
-              src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85"
-              alt="An open, calm living space looking out to greenery"
-            />
-            <div><h3>A little more breathing room</h3><p>Open spaces that still feel like home.</p></div>
-          </article>
-          <article className="inspiration-item">
-            <img
-              src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85"
-              alt="A sculptural modern home framed by desert plants"
-            />
-            <div><h3>Somewhere to settle in</h3><p>Good design makes everyday life feel considered.</p></div>
-          </article>
-        </div>
-      </section>
-
-      <section className="room-start" id="room-start">
-        <div className="room-start-copy">
-          <p className="home-section-label">Your room, your starting point</p>
-          <h2>Let’s see what it could become.</h2>
-          <p>
-            Bring in a room photo or floor plan. We’ll keep the original close
-            while you explore what might feel better.
-          </p>
-          <Link to="/draw" onClick={handleStartBuilding} className="room-start-draw">
-            Or start with a blank sketch <ArrowRight size={16} />
-          </Link>
-        </div>
-        <div className="room-start-upload">
-          <h3>Bring your room in</h3>
+        <div className="home-simple-upload">
+          <h2>Upload a room photo</h2>
           <Upload onComplete={handleUploadComplete} />
         </div>
-      </section>
-
-      <section className="home-film">
-        <button
-          type="button"
-          className="home-film-poster"
-          onClick={() => setIsDemoOpen(true)}
-          aria-label="Watch the Roomify demo"
-        >
-          <img
-            src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2200&q=88"
-            alt="A modern home glowing in the evening light"
-          />
-          <span className="home-film-play"><Play size={20} fill="currentColor" /></span>
-          <span className="home-film-caption">A room can change everything.</span>
-        </button>
       </section>
 
       {projects.length > 0 && <section className="projects">
@@ -290,18 +158,30 @@ export default function Home() {
               (
                 { id, name, renderedImage, sourceImage, timestamp, isPublic },
                 index,
-              ) => (
-                <div
-                  key={`${id}-${index}`}
-                  className="project-card group"
-                  onClick={() => navigate(`/visualizer/${id}`)}
-                >
-                  <div className="preview">
-                    <img src={renderedImage || sourceImage} alt="Project" />
+              ) => {
+                const projectPath = `/visualizer/${id}`;
+                const projectState = {
+                  initialImage: sourceImage,
+                  initialRendered: renderedImage || null,
+                  name,
+                  timestamp,
+                  isPublic,
+                };
 
-                    <div className="badge">
-                      <span>{isPublic ? "Shared" : "Private"}</span>
-                    </div>
+                return (
+                <article key={`${id}-${index}`} className="project-card group">
+                  <div className="preview">
+                    <Link
+                      to={projectPath}
+                      state={projectState}
+                      className="project-card-preview-link"
+                      aria-label={`Open ${name}`}
+                    >
+                      <img src={renderedImage || sourceImage} alt="Project" />
+                      <div className="badge">
+                        <span>{isPublic ? "Shared" : "Private"}</span>
+                      </div>
+                    </Link>
 
                     <button
                       className="delete-btn"
@@ -312,7 +192,11 @@ export default function Home() {
                     </button>
                   </div>
 
-                  <div className="card-body">
+                  <Link
+                    to={projectPath}
+                    state={projectState}
+                    className="card-body project-card-body-link"
+                  >
                     <div>
                       <h3>{name}</h3>
 
@@ -324,9 +208,10 @@ export default function Home() {
                     <div className="arrow">
                       <ArrowUpRight size={18} />
                     </div>
-                  </div>
-                </div>
-              ),
+                  </Link>
+                </article>
+                );
+              },
             )}
           </div>
         </div>
@@ -357,19 +242,6 @@ export default function Home() {
         </div>
       )}
 
-      {isDemoOpen && (
-        <div className="demo-modal" onClick={() => setIsDemoOpen(false)}>
-          <div
-            className="demo-modal-content"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button className="demo-close" onClick={() => setIsDemoOpen(false)}>
-              <X size={20} />
-            </button>
-            <video src="/demo.mp4" controls autoPlay className="demo-video" />
-          </div>
-        </div>
-      )}
       <Footer />
     </div>
   );

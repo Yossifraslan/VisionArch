@@ -1,7 +1,7 @@
 import { Tldraw, useEditor, createShapeId, toRichText } from "tldraw";
 import "tldraw/tldraw.css";
 import { useEffect, useState } from "react";
-import { useNavigate, Link, Navigate, useOutletContext } from "react-router";
+import { useNavigate, Link } from "react-router";
 import { Box, X, Sparkles, LayoutTemplate, AlertTriangle } from "lucide-react";
 import { createProject } from "../../lib/puter.action";
 import { FLOOR_PLAN_TEMPLATES } from "../../lib/templates";
@@ -249,11 +249,6 @@ const DrawCanvas = () => {
 
 export default function Draw() {
   const navigate = useNavigate();
-  const { isSignedIn } = useOutletContext<AuthContext>();
-
-  if (!isSignedIn) {
-    return <Navigate to="/" replace />;
-  }
 
   return (
     <div className="draw-page">

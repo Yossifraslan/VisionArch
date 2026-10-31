@@ -26,6 +26,8 @@ type VisualizerNavigationState = {
   initialImage?: string;
   initialRendered?: string | null;
   name?: string;
+  timestamp?: number;
+  isPublic?: boolean;
 };
 
 const VisualizerId = () => {
@@ -183,9 +185,9 @@ const VisualizerId = () => {
           name: navigationState.name || `Residence ${id}`,
           sourceImage: navigationState.initialImage,
           renderedImage: navigationState.initialRendered || undefined,
-          timestamp: Date.now(),
+          timestamp: navigationState.timestamp || Date.now(),
           ownerId: userId,
-          isPublic: false,
+          isPublic: navigationState.isPublic ?? false,
         };
 
         setProject(initialProject);

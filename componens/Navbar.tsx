@@ -31,7 +31,7 @@ const Navbar = () => {
         </div>
 
         <div className="links md:flex md:items-center md:gap-6">
-          {isSignedIn && <Link to="/draw">Draw</Link>}
+          <Link to="/draw">Draw</Link>
           <Link to="/community">Ideas from the community</Link>
         </div>
 
